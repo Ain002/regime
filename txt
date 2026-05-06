@@ -1,0 +1,145 @@
+HTML Form (Cheatsheet)
+
+Ce document présente les principales balises HTML pour créer un formulaire :
+
+<form> : structure du formulaire (action, method)
+<input> : champs de saisie (text, email, password…)
+<label> : associe un texte au champ (meilleure accessibilité)
+<textarea> : texte long
+<select> / <option> : liste déroulante
+<optgroup> : regrouper des options
+<button> : bouton (envoyer, reset…)
+<fieldset> / <legend> : organiser les champs
+<datalist> : suggestions automatiques
+<output> : afficher un résultat
+<progress> / <meter> : progression ou mesure
+
+→ C’est un guide technique pour coder des formulaires HTML.
+
+10 règles d’or (UX)
+
+Conseils pour concevoir un bon formulaire :
+
+Comprendre le contexte et les objectifs
+Demander uniquement les informations nécessaires
+Organiser en sections
+Améliorer la lisibilité (labels au-dessus, contraste…)
+Utiliser une seule colonne
+Guider l’utilisateur avec des textes clairs
+Faciliter la saisie (formats simples, auto-remplissage)
+Penser mobile (mobile-first)
+Diviser en étapes si le formulaire est long
+Tester avec des utilisateurs
+
+→ Objectif : rendre le formulaire simple et agréable à remplir.
+
+30 bonnes pratiques UX
+
+Guide détaillé pour optimiser les formulaires :
+
+Organisation :
+
+Une seule colonne
+Regrouper les champs
+Formulaire en plusieurs étapes si nécessaire
+
+Champs :
+
+Utiliser les bons types (radio, checkbox…)
+Adapter la taille des champs
+Limiter les listes déroulantes
+Supprimer les champs inutiles
+
+UX :
+
+Messages d’erreur clairs
+Validation en temps réel
+Mettre en évidence le champ actif
+Autoriser l’auto-complétion
+
+Mobile :
+
+Mobile-first
+Clavier adapté
+Boutons larges
+
+UX writing :
+
+Boutons clairs (ex: “Créer un compte”)
+Expliquer les infos demandées
+Rassurer l’utilisateur
+
+→ Objectif : améliorer l’efficacité et réduire l’abandon.
+
+Conclusion
+
+PDF 1 : Technique (HTML)
+PDF 2 : Principes UX
+PDF 3 : Bonnes pratiques détaillées
+
+→ Ensemble : apprendre à créer, concevoir et optimiser un formulaire web.
+
+
+CONCEPTION DE FORMULAIRES WEB (UX)
+
+Objectif :
+Créer des formulaires simples, efficaces et faciles à remplir pour éviter l’abandon des utilisateurs.
+
+Pourquoi c’est important :
+- Dernière étape du parcours utilisateur (conversion)
+- Mauvaise conception = perte d’utilisateurs et d’argent
+
+Principe clé :
+Demander uniquement les informations essentielles
+
+Erreurs fréquentes :
+- Trop de champs
+- Informations inutiles
+- Mauvais timing
+- CAPTCHA complexe
+- Messages d’erreur flous
+
+Bonnes pratiques :
+
+Structure :
+- Une seule colonne
+- Champs regroupés (identité, adresse, paiement…)
+- Ordre logique
+- Compréhension rapide (en 3 secondes)
+
+UX Writing :
+- Utiliser des boutons explicites
+  Ex : "Créer mon compte" au lieu de "OK"
+
+Lisibilité :
+- Labels au-dessus des champs
+- Bon contraste et espacement
+- Formats simples
+
+Guidage utilisateur :
+- Instructions claires
+- Champ actif visible
+- Aides contextuelles
+
+Saisie facilitée :
+- Auto-complétion
+- Autofill navigateur
+- Champs adaptés
+
+Gestion des erreurs :
+- Messages précis (ex : "Email invalide")
+- Validation en temps réel
+
+Mobile First :
+- Optimisation pour mobile
+- Boutons larges
+- Clavier adapté
+- Éviter les longs menus déroulants
+
+Amélioration :
+- Tests utilisateurs
+- Analyse des données (taux d’abandon, temps de remplissage)
+
+Idée générale :
+Un bon formulaire doit être rapide, clair et sans friction.
+L’utilisateur ne doit jamais hésiter.

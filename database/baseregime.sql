@@ -1,3 +1,7 @@
+CREATE database regime;
+
+use regime;
+
 CREATE TABLE abonnement (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL,
