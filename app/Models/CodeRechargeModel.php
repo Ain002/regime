@@ -18,6 +18,8 @@ class CodeRechargeModel extends Model
         'used_by',
         'used_at'
     ];
+    protected $primaryKey = 'id';
 
+    protected $allowedFields = ['code','montant','used_by','used_at'];
 
 }
