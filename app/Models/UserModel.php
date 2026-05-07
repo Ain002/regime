@@ -14,6 +14,8 @@ class UserModel extends Model
     protected $protectFields = true;
     protected $allowedFields = [
         'nom',
+        'prenom',
+        'date_naissance',
         'email',
         'password',
         'genre',
@@ -25,6 +27,8 @@ class UserModel extends Model
     // Validation rules
     protected $validationRules = [
         'nom' => 'required|string|max_length[255]',
+        'prenom' => 'required|string|max_length[255]',
+        'date_naissance' => 'required|valid_date[Y-m-d]',
         'email' => 'required|valid_email|is_unique[users.email]',
         'password' => 'required|min_length[6]',
         'genre' => 'required|in_list[H,F]',
@@ -37,6 +41,15 @@ class UserModel extends Model
             'required' => 'Le nom est requis',
             'string' => 'Le nom doit être du texte',
             'max_length' => 'Le nom ne peut pas dépasser 255 caractères',
+        ],
+        'prenom' => [
+            'required' => 'Le prénom est requis',
+            'string' => 'Le prénom doit être du texte',
+            'max_length' => 'Le prénom ne peut pas dépasser 255 caractères',
+        ],
+        'date_naissance' => [
+            'required' => 'La date de naissance est requise',
+            'valid_date' => 'La date de naissance est invalide',
         ],
         'email' => [
             'required' => 'L\'email est requis',

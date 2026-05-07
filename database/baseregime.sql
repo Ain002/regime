@@ -10,6 +10,8 @@ CREATE TABLE abonnement (
 CREATE TABLE users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255) NOT NULL,
+    date_naissance DATE NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     genre ENUM('H','F') NOT NULL,
