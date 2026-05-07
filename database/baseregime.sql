@@ -1,5 +1,5 @@
-CREATE database regime;
-use regime;
+CREATE DATABASE regime;
+USE regime;
 
 CREATE TABLE abonnement (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -14,9 +14,21 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     genre ENUM('H','F') NOT NULL,
     taille DOUBLE NOT NULL,
-    poids DOUBLE NOT NULL,
-    abonnement_id INT UNSIGNED NULL,
-    CONSTRAINT fk_user_abonnement
+    poids DOUBLE NOT NULL
+);
+
+CREATE TABLE abonnement_user (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    abonnement_id INT UNSIGNED NOT NULL,
+    date_achat DATETIME DEFAULT CURRENT_TIMESTAMP,
+    date_expiration DATETIME NULL,
+
+    CONSTRAINT fk_abonnement_user_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(id),
+
+    CONSTRAINT fk_abonnement_user_abonnement
     FOREIGN KEY (abonnement_id)
     REFERENCES abonnement(id)
 );
