@@ -154,6 +154,9 @@
                                 </div>
 
                                 <!-- Boutons de navigation -->
+                                <div class="mb-2">
+                                    <a href="<?= base_url('/choose') ?>" class="btn btn-light btn-sm">← Retour au choix</a>
+                                </div>
                                 <div class="form-group form-nav-buttons">
                                     <button type="button" class="btn btn-secondary btn-user btn-block" id="prevBtn" style="display: none; margin-bottom: 10px;">← Retour</button>
                                     <button type="button" class="btn btn-primary btn-user btn-block" id="nextBtn">Suivant →</button>

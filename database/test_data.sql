@@ -4,15 +4,20 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Abonnements
-INSERT INTO abonnement (id, libelle, reduction) VALUES
-(1, 'Free', 0.0),
-(2, 'Premium', 20.0);
+INSERT INTO abonnement (id, libelle, prix, reduction) VALUES
+(1, 'Free', 0.00, 0.0),
+(2, 'Premium', 19.99, 20.0);
+
+-- Type users
+INSERT INTO type_user (id, code) VALUES
+(1, 'client'),
+(2, 'admin');
 
 -- Users (password = "password")
 -- bcrypt hash for 'password' (common test hash)
-INSERT INTO users (id, nom, prenom, date_naissance, email, password, genre, taille, poids, abonnement_id) VALUES
-(1, 'Dupont', 'Alice', '1995-05-10', 'alice@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'F', 165.0, 60.0, 2),
-(2, 'Martin', 'Bob',   '1992-11-21', 'bob@example.com',   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'H', 180.0, 85.0, NULL);
+INSERT INTO users (id, nom, prenom, date_naissance, email, password, genre, taille, poids, type_user_id, abonnement_id) VALUES
+(1, 'Dupont', 'Alice', '1995-05-10', 'alice@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'F', 165.0, 60.0, 1, 2),
+(2, 'Martin', 'Bob',   '1992-11-21', 'bob@example.com',   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'H', 180.0, 85.0, 1, NULL);
 
 -- Wallets
 INSERT INTO wallet (id, user_id, solde) VALUES

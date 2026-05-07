@@ -1,10 +1,16 @@
-CREATE DATABASE regime;
-USE regime;
+CREATE database regime;
+use regime;
 
 CREATE TABLE abonnement (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL,
+    prix DOUBLE NOT NULL,
     reduction DOUBLE NOT NULL
+);
+
+CREATE TABLE type_user (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
@@ -16,21 +22,13 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     genre ENUM('H','F') NOT NULL,
     taille DOUBLE NOT NULL,
-    poids DOUBLE NOT NULL
-);
-
-CREATE TABLE abonnement_user (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    abonnement_id INT UNSIGNED NOT NULL,
-    date_achat DATETIME DEFAULT CURRENT_TIMESTAMP,
-    date_expiration DATETIME NULL,
-
-    CONSTRAINT fk_abonnement_user_user
-    FOREIGN KEY (user_id)
-    REFERENCES users(id),
-
-    CONSTRAINT fk_abonnement_user_abonnement
+    poids DOUBLE NOT NULL,
+    type_user_id INT UNSIGNED NOT NULL DEFAULT 1,
+    abonnement_id INT UNSIGNED NULL,
+    CONSTRAINT fk_user_type_user
+    FOREIGN KEY (type_user_id)
+    REFERENCES type_user(id),
+    CONSTRAINT fk_user_abonnement
     FOREIGN KEY (abonnement_id)
     REFERENCES abonnement(id)
 );
@@ -99,10 +97,7 @@ CREATE TABLE aliment (
     type_aliment ENUM(
         'viande',
         'poisson',
-        'volaille',
-        'legume',
-        'fruit',
-        'autre'
+        'volaille'
     ) NOT NULL
 );
 

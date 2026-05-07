@@ -46,6 +46,7 @@ class AuthFunctions
             'genre' => $genre,
             'taille' => $taille,
             'poids' => $poids,
+            'type_user_id' => 1,
         ];
 
         $this->userModel->skipValidation(true);
@@ -96,6 +97,14 @@ class AuthFunctions
     public function getUserById($userId)
     {
         return $this->userModel->find($userId);
+    }
+
+    /**
+     * Get a user by nom and type_user_id
+     */
+    public function getUserByNameAndType($nom, $typeUserId)
+    {
+        return $this->userModel->where('nom', $nom)->where('type_user_id', $typeUserId)->first();
     }
 
     /**

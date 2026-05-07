@@ -5,7 +5,13 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/choose', 'Auth::choose');
+// New entry point for choosing admin or client
+$routes->get('/auth/admin-login', 'Auth::adminLogin');
+$routes->post('/auth/admin-authenticate', 'Auth::adminAuthenticate');
+
+// root -> choose page
+$routes->get('/', 'Auth::choose');
 
 // Auth routes
 $routes->get('/login', 'Auth::login');
