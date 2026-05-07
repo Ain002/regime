@@ -1,5 +1,4 @@
 CREATE database regime;
-
 use regime;
 
 CREATE TABLE abonnement (
