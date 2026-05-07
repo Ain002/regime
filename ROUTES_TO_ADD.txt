@@ -1,0 +1,36 @@
+========================================
+ROUTES À AJOUTER DANS app/Config/Routes.php
+========================================
+
+Ajouter avant la dernière ligne (si elle est $routes->match(...)) ou au début de la section des routes :
+
+// === RÉGIMES ===
+$routes->get('regime', 'RegimeController::index');
+$routes->get('regime/create', 'RegimeController::create');
+$routes->post('regime/store', 'RegimeController::store');
+$routes->get('regime/edit/(:num)', 'RegimeController::edit/$1');
+$routes->post('regime/update/(:num)', 'RegimeController::update/$1');
+$routes->post('regime/delete/(:num)', 'RegimeController::delete/$1');
+
+// === ACTIVITÉS ===
+$routes->get('activity', 'ActivityController::index');
+$routes->get('activity/create', 'ActivityController::create');
+$routes->post('activity/store', 'ActivityController::store');
+$routes->get('activity/edit/(:num)', 'ActivityController::edit/$1');
+$routes->post('activity/update/(:num)', 'ActivityController::update/$1');
+$routes->post('activity/delete/(:num)', 'ActivityController::delete/$1');
+
+// === CODES PORTE-MONNAIE (USER) ===
+$routes->get('wallet/request', 'WalletCodeController::requestForm');
+$routes->post('wallet/request/code', 'WalletCodeController::requestCode');
+
+// === CODES PORTE-MONNAIE (ADMIN) ===
+$routes->get('admin/wallet', 'AdminWalletController::index');
+$routes->get('admin/wallet/approve/(:num)', 'AdminWalletController::approve/$1');
+$routes->get('admin/wallet/reject/(:num)', 'AdminWalletController::reject/$1');
+$routes->get('admin/wallet/mark-used/(:num)', 'AdminWalletController::markUsed/$1');
+
+// === PARAMÈTRES ===
+$routes->get('parameter', 'ParameterController::index');
+$routes->get('parameter/edit/(:num)', 'ParameterController::edit/$1');
+$routes->post('parameter/update/(:num)', 'ParameterController::update/$1');
