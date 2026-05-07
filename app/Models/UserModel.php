@@ -21,13 +21,14 @@ class UserModel extends Model
         'genre',
         'taille',
         'poids',
+        'type_user_id',
         'abonnement_id',
     ];
 
     // Validation rules
     protected $validationRules = [
-        'nom' => 'required|string|max_length[255]',
-        'prenom' => 'required|string|max_length[255]',
+        'nom' => "required|regex_match[/^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,255}$/]|max_length[255]",
+        'prenom' => "required|regex_match[/^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,255}$/]|max_length[255]",
         'date_naissance' => 'required|valid_date[Y-m-d]',
         'email' => 'required|valid_email|is_unique[users.email]',
         'password' => 'required|min_length[6]',
@@ -39,12 +40,12 @@ class UserModel extends Model
     protected $validationMessages = [
         'nom' => [
             'required' => 'Le nom est requis',
-            'string' => 'Le nom doit être du texte',
+            'regex_match' => 'Le nom contient des caractères invalides',
             'max_length' => 'Le nom ne peut pas dépasser 255 caractères',
         ],
         'prenom' => [
             'required' => 'Le prénom est requis',
-            'string' => 'Le prénom doit être du texte',
+            'regex_match' => 'Le prénom contient des caractères invalides',
             'max_length' => 'Le prénom ne peut pas dépasser 255 caractères',
         ],
         'date_naissance' => [
