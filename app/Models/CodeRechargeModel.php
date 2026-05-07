@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use CodeIgniter\Model;
 
 class CodeRechargeModel extends Model
@@ -17,4 +18,8 @@ class CodeRechargeModel extends Model
         'used_by',
         'used_at'
     ];
+    protected $primaryKey = 'id';
+
+    protected $allowedFields = ['code','montant','used_by','used_at'];
+
 }

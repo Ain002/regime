@@ -24,4 +24,12 @@ class AbonnementUserModel extends Model
                 ->orWhere('date_expiration', null) 
                 ->first() !== null;
     }
+
+class AbonnementUserModel extends Model
+{
+    protected $table = 'abonnement_user';
+    protected $primaryKey = 'id';
+
+    protected $allowedFields = ['user_id','abonnement_id','date_achat','date_expiration'];
+
 }

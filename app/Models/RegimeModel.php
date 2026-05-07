@@ -81,4 +81,8 @@ class RegimeModel extends Model
 
         return $regime;
     }
+    protected $primaryKey = 'id';
+    
+    protected $allowedFields = ['nom','duree','variation_poids','prix'];
+
 }
