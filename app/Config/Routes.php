@@ -19,3 +19,6 @@ $routes->post('/profile/complete', 'Auth::completeProfileSubmit');
 
 // acaht gold
 $routes->post('/achat-gold', 'AbonnementController::acheterGold');
+
+// saisie de code
+$routes->get('/code', 'CodeRechargeController::saisieCode');
