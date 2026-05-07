@@ -99,10 +99,7 @@ CREATE TABLE aliment (
     type_aliment ENUM(
         'viande',
         'poisson',
-        'volaille',
-        'legume',
-        'fruit',
-        'autre'
+        'volaille'
     ) NOT NULL
 );
 
