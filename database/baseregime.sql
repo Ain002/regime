@@ -17,7 +17,6 @@ CREATE TABLE users (
     taille DOUBLE NOT NULL,
     poids DOUBLE NOT NULL,
     abonnement_id INT UNSIGNED NULL,
-
     CONSTRAINT fk_user_abonnement
     FOREIGN KEY (abonnement_id)
     REFERENCES abonnement(id)
