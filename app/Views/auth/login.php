@@ -53,21 +53,43 @@
 
                                     <form class="user" method="POST" action="<?= base_url('/auth/authenticate') ?>" id="loginForm">
                                         <?= csrf_field() ?>
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user" id="email" name="email" aria-describedby="emailHelp" placeholder="Entrez votre email..." value="<?= old('email') ?>" required autocomplete="email">
-                                            <span class="error-text" id="emailError">Email invalide</span>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Mot de passe" required autocomplete="current-password">
-                                            <span class="error-text" id="passwordError">Mot de passe requis (min 6 caractères)</span>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="remember" name="remember">
-                                                <label class="custom-control-label" for="remember">Se souvenir de moi</label>
+
+                                        <!-- Indicateur d'étape -->
+                                        <div class="progress mb-4" style="height: 25px;">
+                                            <div class="progress-bar progress-bar-striped bg-primary step-progress" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                <span class="progress-text">Étape <span class="current-step">1</span>/2</span>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">Se connecter</button>
+
+                                        <!-- Étape 1: Email -->
+                                        <div class="form-step" data-step="1">
+                                            <h5 class="text-gray-800 mb-3">Entrez votre email</h5>
+                                            <div class="form-group">
+                                                <input type="email" class="form-control form-control-user" id="email" name="email" aria-describedby="emailHelp" placeholder="Entrez votre email..." value="<?= old('email') ?>" required autocomplete="email">
+                                                <span class="error-text" id="emailError">Email invalide</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Étape 2: Mot de passe -->
+                                        <div class="form-step" data-step="2" style="display: none;">
+                                            <h5 class="text-gray-800 mb-3">Entrez votre mot de passe</h5>
+                                            <div class="form-group">
+                                                <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Mot de passe" required autocomplete="current-password">
+                                                <span class="error-text" id="passwordError">Mot de passe requis (min 6 caractères)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox small">
+                                                    <input type="checkbox" class="custom-control-input" id="remember" name="remember">
+                                                    <label class="custom-control-label" for="remember">Se souvenir de moi</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Boutons de navigation -->
+                                        <div class="form-group form-nav-buttons">
+                                            <button type="button" class="btn btn-secondary btn-user btn-block" id="prevBtn" style="display: none; margin-bottom: 10px;">← Retour</button>
+                                            <button type="button" class="btn btn-primary btn-user btn-block" id="nextBtn">Suivant →</button>
+                                        </div>
                                         <hr>
                                     </form>
 
@@ -96,7 +118,15 @@
     <script src="<?= base_url('template/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('template/vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
     <script src="<?= base_url('template/js/sb-admin-2.min.js') ?>"></script>
-    <script src="<?= base_url('js/login-validation.js') ?>"></script>
+    <script src="<?= base_url('js/multi-step-forms.js') ?>"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            if (form) {
+                initializeMultiStepForm(form, 2);
+            }
+        });
+    </script>
 
 </body>
 

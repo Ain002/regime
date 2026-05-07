@@ -10,9 +10,9 @@ INSERT INTO abonnement (id, libelle, reduction) VALUES
 
 -- Users (password = "password")
 -- bcrypt hash for 'password' (common test hash)
-INSERT INTO users (id, nom, email, password, genre, taille, poids, abonnement_id) VALUES
-(1, 'Alice Dupont', 'alice@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'F', 165.0, 60.0, 2),
-(2, 'Bob Martin',   'bob@example.com',   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'H', 180.0, 85.0, NULL);
+INSERT INTO users (id, nom, prenom, date_naissance, email, password, genre, taille, poids, abonnement_id) VALUES
+(1, 'Dupont', 'Alice', '1995-05-10', 'alice@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'F', 165.0, 60.0, 2),
+(2, 'Martin', 'Bob',   '1992-11-21', 'bob@example.com',   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.IlQpiX6a9rJNq5e.', 'H', 180.0, 85.0, NULL);
 
 -- Wallets
 INSERT INTO wallet (id, user_id, solde) VALUES
@@ -32,8 +32,9 @@ INSERT INTO code_recharge (id, code, montant, used, used_by) VALUES
 
 -- Objectifs
 INSERT INTO objectif (id, description) VALUES
-(1, 'Perdre 5 kg'),
-(2, 'Gagner du muscle');
+(1, 'Perdre de poids'),
+(2, 'Atteindre son IMC idéal'),
+(3, 'Gagner de poids');
 
 -- Objectif_user
 INSERT INTO objectif_user (id, user_id, objectif_id) VALUES
