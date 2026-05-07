@@ -17,6 +17,51 @@ class Auth extends BaseController
         return view('auth/login');
     }
 
+    public function choose()
+    {
+        return view('auth/choose');
+    }
+
+    public function adminLogin()
+    {
+        return view('auth/admin_login');
+    }
+
+    public function adminAuthenticate()
+    {
+        if (!$this->request->is('post')) {
+            return redirect()->to('/auth/admin-login');
+        }
+
+        $nom = $this->request->getPost('nom');
+        $password = $this->request->getPost('password');
+
+        // Basic validation
+        if (!$this->validate([
+            'nom' => 'required',
+            'password' => 'required'
+        ])) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Find user with type_user_id = admin (2)
+        $user = $this->authFunctions->getUserByNameAndType($nom, 2);
+
+        if ($user && password_verify($password, $user['password'])) {
+            session()->set([
+                'user_id' => $user['id'],
+                'nom' => ($user['prenom'] ?? '') . ' ' . $user['nom'],
+                'email' => $user['email'] ?? null,
+                'isAdmin' => true,
+                'isLoggedIn' => true,
+            ]);
+
+            return redirect()->to('/admin')->with('success', 'Bienvenue admin');
+        }
+
+        return redirect()->back()->withInput()->with('error', 'Identifiants admin invalides');
+    }
+
     public function register()
     {
         return view('auth/register');
