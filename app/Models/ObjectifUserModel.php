@@ -19,10 +19,10 @@ class ObjectifUserModel extends Model
     public function getLatestObjectifByUserId($userId)
     {
         return $this->select('o.description')
-                    ->from('objectif_user ou') // Alias pour la table principale
+                    ->from('objectif_user ou') 
                     ->join('objectif o', 'o.id = ou.objectif_id')
                     ->where('ou.user_id', $userId)
                     ->orderBy('ou.date_choix', 'DESC')
-                    ->first(); // Retourne directement le premier résultat ou null
+                    ->first(); 
     }
 }

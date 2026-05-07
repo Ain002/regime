@@ -80,5 +80,6 @@ class RegimeModel extends Model
             $regime['variation_poids'] + $variationSport;
 
         return $regime;
+
     }
 }
