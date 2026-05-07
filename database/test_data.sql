@@ -4,9 +4,9 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Abonnements
-INSERT INTO abonnement (id, libelle, reduction) VALUES
-(1, 'Free', 0.0),
-(2, 'Premium', 20.0);
+INSERT INTO abonnement (id, libelle, prix, reduction) VALUES
+(1, 'Free', 0.00, 0.0),
+(2, 'Premium', 19.99, 20.0);
 
 -- Users (password = "password")
 -- bcrypt hash for 'password' (common test hash)
