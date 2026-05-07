@@ -4,10 +4,54 @@ namespace App\Controllers;
 
 use App\Models\RegimeModel;
 use App\Models\ObjectifUserModel;
-use App\Models\AbonnementUserModel; // Ajouté pour vérifier le statut Gold
+use App\Models\AbonnementUserModel; 
+
+use FPDF;
 
 class RecommendationController extends BaseController
 {
+    public function exportFPDF($regimeId)
+    {
+        $regimeModel = new RegimeModel();
+        $programme = $regimeModel->getFullProgram($regimeId);
+        $user = session()->get('user');
+
+        // P = Portrait, mm = millimètres, A4 = format
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->AddPage();
+        
+        // --- En-tête ---
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->SetTextColor(0, 0, 0); // Couleur Noire
+        $pdf->Cell(0, 10, utf8_decode("VOTRE PROGRAMME DE RÉGIME"), 0, 1, 'C');
+        $pdf->Ln(10); // Saut de ligne
+
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(0, 10, utf8_decode("Utilisateur : " . $user['nom'] . " " . $user['prenom']), 0, 1);
+        $pdf->Cell(0, 10, "IMC : " . round($user['poids'] / ($user['taille']**2), 2), 0, 1);
+        $pdf->Ln(5);
+
+        $pdf->SetFillColor(255, 255, 128); // navy blue 
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(0, 12, utf8_decode("Régime : " . $programme['nom']), 0, 1, 'L', true);
+        $pdf->Ln(5);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        // En-têtes du tableau
+        $pdf->Cell(130, 10, "Aliment", 1);
+        $pdf->Cell(60, 10, "Pourcentage", 1, 1);
+
+        $pdf->SetFont('Arial', '', 12);
+        foreach ($programme['aliments'] as $al) {
+            $pdf->Cell(130, 10, utf8_decode($al['nom']), 1);
+            $pdf->Cell(60, 10, $al['pourcentage'] . "%", 1, 1);
+        }
+
+        // 'D' force le téléchargement, 'I' affiche dans le navigateur
+        $this->response->setHeader('Content-Type', 'application/pdf');
+        $pdf->Output('D', 'Regime_' . $programme['nom'] . '.pdf');
+    }
     public function index()
     {
         $user = session()->get('user');
