@@ -543,3 +543,59 @@ in SYSTEMPATH/Database/MySQLi/Connection.php on line 300.
 13 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
 14 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
 15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+ERROR - 2026-05-07 20:45:33 --> Error connecting to the database: mysqli_sql_exception: Connection refused in /opt/lampp/htdocs/S4/regime/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /opt/lampp/htdocs/S4/regime/system/Database/MySQLi/Connection.php(201): mysqli->real_connect()
+#1 /opt/lampp/htdocs/S4/regime/system/Database/BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect()
+#2 /opt/lampp/htdocs/S4/regime/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /opt/lampp/htdocs/S4/regime/system/Validation/Rules.php(175): CodeIgniter\Database\BaseBuilder->get()
+#5 /opt/lampp/htdocs/S4/regime/system/Validation/StrictRules/Rules.php(187): CodeIgniter\Validation\Rules->is_unique()
+#6 /opt/lampp/htdocs/S4/regime/system/Validation/Validation.php(345): CodeIgniter\Validation\StrictRules\Rules->is_unique()
+#7 /opt/lampp/htdocs/S4/regime/system/Validation/Validation.php(210): CodeIgniter\Validation\Validation->processRules()
+#8 /opt/lampp/htdocs/S4/regime/system/Controller.php(136): CodeIgniter\Validation\Validation->run()
+#9 /opt/lampp/htdocs/S4/regime/app/Controllers/Auth.php(130): CodeIgniter\Controller->validate()
+#10 /opt/lampp/htdocs/S4/regime/system/CodeIgniter.php(951): App\Controllers\Auth->registerSubmit()
+#11 /opt/lampp/htdocs/S4/regime/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#12 /opt/lampp/htdocs/S4/regime/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#13 /opt/lampp/htdocs/S4/regime/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#14 /opt/lampp/htdocs/S4/regime/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#15 /opt/lampp/htdocs/S4/regime/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Connection refused in /opt/lampp/htdocs/S4/regime/system/Database/MySQLi/Connection.php:231
+Stack trace:
+#0 /opt/lampp/htdocs/S4/regime/system/Database/BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect()
+#1 /opt/lampp/htdocs/S4/regime/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /opt/lampp/htdocs/S4/regime/system/Validation/Rules.php(175): CodeIgniter\Database\BaseBuilder->get()
+#4 /opt/lampp/htdocs/S4/regime/system/Validation/StrictRules/Rules.php(187): CodeIgniter\Validation\Rules->is_unique()
+#5 /opt/lampp/htdocs/S4/regime/system/Validation/Validation.php(345): CodeIgniter\Validation\StrictRules\Rules->is_unique()
+#6 /opt/lampp/htdocs/S4/regime/system/Validation/Validation.php(210): CodeIgniter\Validation\Validation->processRules()
+#7 /opt/lampp/htdocs/S4/regime/system/Controller.php(136): CodeIgniter\Validation\Validation->run()
+#8 /opt/lampp/htdocs/S4/regime/app/Controllers/Auth.php(130): CodeIgniter\Controller->validate()
+#9 /opt/lampp/htdocs/S4/regime/system/CodeIgniter.php(951): App\Controllers\Auth->registerSubmit()
+#10 /opt/lampp/htdocs/S4/regime/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#11 /opt/lampp/htdocs/S4/regime/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#12 /opt/lampp/htdocs/S4/regime/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#13 /opt/lampp/htdocs/S4/regime/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#14 /opt/lampp/htdocs/S4/regime/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#15 {main}
+CRITICAL - 2026-05-07 20:45:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Connection refused
+[Method: POST, Route: auth/register]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Validation/Rules.php(175): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/Validation/StrictRules/Rules.php(187): CodeIgniter\Validation\Rules->is_unique()
+ 5 SYSTEMPATH/Validation/Validation.php(345): CodeIgniter\Validation\StrictRules\Rules->is_unique()
+ 6 SYSTEMPATH/Validation/Validation.php(210): CodeIgniter\Validation\Validation->processRules()
+ 7 SYSTEMPATH/Controller.php(136): CodeIgniter\Validation\Validation->run()
+ 8 APPPATH/Controllers/Auth.php(130): CodeIgniter\Controller->validate()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Auth->registerSubmit()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
