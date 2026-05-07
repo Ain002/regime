@@ -1,3 +1,6 @@
+CREATE database regime;
+use regime;
+
 CREATE TABLE abonnement (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL,
@@ -13,7 +16,6 @@ CREATE TABLE users (
     taille DOUBLE NOT NULL,
     poids DOUBLE NOT NULL,
     abonnement_id INT UNSIGNED NULL,
-
     CONSTRAINT fk_user_abonnement
     FOREIGN KEY (abonnement_id)
     REFERENCES abonnement(id)

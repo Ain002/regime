@@ -26,10 +26,11 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
-        'username'     => '',
+        // Use 127.0.0.1 instead of 'localhost' to force TCP and avoid socket path issues
+        'hostname'     => '127.0.0.1',
+        'username'     => 'root',
         'password'     => '',
-        'database'     => '',
+        'database'     => 'regime',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -50,6 +51,7 @@ class Database extends Config
             'time'     => 'H:i:s',
         ],
     ];
+
 
     //    /**
     //     * Sample database connection for SQLite3.
