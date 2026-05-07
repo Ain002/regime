@@ -8,7 +8,8 @@ class RegimeModel extends Model
 {
     protected $table = 'regime';
     protected $primaryKey = 'id';
+    protected $useTimestamps = false;
     
-    protected $allowedFields = ['nom','duree','variation_poids','prix'];
+    protected $allowedFields = ['nom','duree','variation_poids','prix','description'];
 
 }

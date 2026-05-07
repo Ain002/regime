@@ -1,0 +1,117 @@
+========================================
+COMMANDES SQL À EXÉCUTER
+========================================
+
+Exécutez ces requêtes dans votre base de données :
+
+-- ========== TABLE ALIMENTS ==========
+CREATE TABLE IF NOT EXISTS `aliments` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `nom` VARCHAR(255) NOT NULL,
+  `type` VARCHAR(50) DEFAULT NULL COMMENT 'viande, poisson, volaille, etc.',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========== TABLE REGIME_ALIMENT (pivot) ==========
+CREATE TABLE IF NOT EXISTS `regime_aliment` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `regime_id` INT NOT NULL,
+  `aliment_id` INT NOT NULL,
+  `percentage` DECIMAL(5,2) NOT NULL DEFAULT 0,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (`regime_id`) REFERENCES `regime`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`aliment_id`) REFERENCES `aliments`(`id`) ON DELETE CASCADE,
+  UNIQUE KEY `unique_regime_aliment` (`regime_id`, `aliment_id`),
+  INDEX `aliment_id` (`aliment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========== TABLE ACTIVITIES ==========
+CREATE TABLE IF NOT EXISTS `activities` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `nom` VARCHAR(255) NOT NULL,
+  `met` DECIMAL(6,2) DEFAULT NULL COMMENT 'Metabolic Equivalent of Task',
+  `description` TEXT,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========== TABLE WALLET_CODES ==========
+CREATE TABLE IF NOT EXISTS `wallet_codes` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `code` VARCHAR(100) NOT NULL UNIQUE,
+  `value` DECIMAL(10,2) NOT NULL COMMENT 'Montant en Ar',
+  `status` VARCHAR(50) DEFAULT 'available' COMMENT 'available, pending, approved, rejected, used',
+  `user_id` INT DEFAULT NULL,
+  `requested_at` DATETIME DEFAULT NULL,
+  `approved_at` DATETIME DEFAULT NULL,
+  `rejected_at` DATETIME DEFAULT NULL,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `code` (`code`),
+  INDEX `status` (`status`),
+  INDEX `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========== TABLE PARAMETERS ==========
+CREATE TABLE IF NOT EXISTS `parameters` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `key` VARCHAR(100) NOT NULL UNIQUE,
+  `value` TEXT,
+  `description` VARCHAR(255),
+  INDEX `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========== DONNÉES D'EXEMPLE ==========
+
+-- Exemples d'aliments
+INSERT INTO `aliments` (`nom`, `type`) VALUES
+('Poulet', 'volaille'),
+('Boeuf', 'viande'),
+('Poisson blanc', 'poisson'),
+('Saumon', 'poisson'),
+('Jambon', 'viande'),
+('Dinde', 'volaille')
+ON DUPLICATE KEY UPDATE `nom`=VALUES(`nom`);
+
+-- Exemples d'activités
+INSERT INTO `activities` (`nom`, `met`, `description`) VALUES
+('Marche rapide', 3.5, 'Marche à 5.5 km/h'),
+('Course', 8.0, 'Course à 9.7 km/h'),
+('Vélo', 6.0, 'Vélo à intensité modérée'),
+('Natation', 7.0, 'Natation modérée'),
+('Musculation', 6.0, 'Entraînement avec poids')
+ON DUPLICATE KEY UPDATE `nom`=VALUES(`nom`);
+
+-- Exemples de codes porte-monnaie
+INSERT INTO `wallet_codes` (`code`, `value`, `status`) VALUES
+('CODE2024-001', 10000, 'available'),
+('CODE2024-002', 20000, 'available'),
+('CODE2024-003', 50000, 'available')
+ON DUPLICATE KEY UPDATE `value`=VALUES(`value`);
+
+-- Exemples de paramètres
+INSERT INTO `parameters` (`key`, `value`, `description`) VALUES
+('prix_base_regime_court', '1000', 'Prix par jour pour régime <= 7 jours'),
+('prix_base_regime_moyen', '900', 'Prix par jour pour régime 8-30 jours'),
+('prix_base_regime_long', '800', 'Prix par jour pour régime > 30 jours'),
+('devise', 'Ar', 'Devise locale')
+ON DUPLICATE KEY UPDATE `value`=VALUES(`value`);
+
+-- Si la colonne description n'existe pas dans votre table regime, ajoutez-la :
+ALTER TABLE `regime` ADD COLUMN `description` TEXT DEFAULT NULL AFTER `prix`;
+
+========================================
+NOTES :
+========================================
+
+1. La table `regime` doit exister (déjà créée selon vos fichiers).
+2. Les clés étrangères utilisent CASCADE DELETE, donc supprimer un régime supprime automatiquement ses aliments associés.
+3. Les exemples de données sont optionnels — vous pouvez les ignorer et ajouter vos propres données.
+4. La statut 'available' = code pas encore demandé par un user.
+5. La statut 'pending' = user a demandé, en attente approbation admin.
+6. La statut 'approved' = approuvé par admin, peut être utilisé.
+7. La statut 'rejected' = rejeté par admin.
+8. La statut 'used' = code déjà utilisé.
