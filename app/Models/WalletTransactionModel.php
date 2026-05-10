@@ -8,7 +8,10 @@ class WalletTransactionModel extends Model
 {
     protected $table = 'wallet_transactions';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['wallet_id', 'montant', 'type', 'user_id', 'created_at'];
+    // The table only has `created_at` (no `updated_at`).
+    // Let CodeIgniter manage `created_at` but disable `updated_at`.
+    protected $allowedFields = ['wallet_id', 'montant', 'type', 'user_id'];
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
+    protected $updatedField = false;
 }

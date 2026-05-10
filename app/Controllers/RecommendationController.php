@@ -115,11 +115,7 @@ class RecommendationController extends BaseController
         foreach ($regimes as $regime) {
             $details = $regimeModel->getFullProgram($regime['id']);
             
-            $prixTotal = $regime['prix']; 
-
-            if ($isGold) {
-                $prixTotal = $prixTotal * 0.85; 
-            }
+            $prixTotal = AbonnementUserModel::applyGoldDiscount((float) $regime['prix'], $isGold);
 
             $details['prix_final'] = round($prixTotal, 2);
             $details['is_gold_applied'] = $isGold; 
@@ -163,11 +159,8 @@ class RecommendationController extends BaseController
         }
 
         // Vérifier le solde
-        $prix = $regime['prix'];
         $aboModel = new AbonnementUserModel();
-        if ($aboModel->isUserGold($user['id'])) {
-            $prix = $prix * 0.85;
-        }
+        $prix = AbonnementUserModel::applyGoldDiscount((float) $regime['prix'], $aboModel->isUserGold($user['id']));
 
         if ($wallet['solde'] < $prix) {
             return redirect()->to('/recommendation')->with('error', 'Solde insuffisant. Veuillez recharger votre portefeuille.');

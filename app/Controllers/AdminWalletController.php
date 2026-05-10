@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\WalletCodeModel;
+use App\Models\WalletModel;
+use App\Models\WalletTransactionModel;
 
 class AdminWalletController extends BaseController
 {
@@ -24,24 +26,56 @@ class AdminWalletController extends BaseController
         return view('admin/wallet/list', $data);
     }
 
-    // Approuver un code
+    // Approuver un code et créditer le compte
     public function approve($id)
     {
-        $model = new WalletCodeModel();
-        $code = $model->find($id);
+        $walletCodeModel = new WalletCodeModel();
+        $walletModel = new WalletModel();
+        $transactionModel = new WalletTransactionModel();
+
+        $code = $walletCodeModel->find($id);
 
         if (!$code) {
             return redirect()->back()->with('error', 'Code non trouvé.');
         }
 
-        $model->update($id, [
-            'status' => 'approved',
+        if ($code['status'] !== 'pending') {
+            return redirect()->back()->with('error', 'Ce code n\'est pas en attente d\'approbation.');
+        }
+
+        if (!$code['user_id']) {
+            return redirect()->back()->with('error', 'Pas d\'utilisateur associé à ce code.');
+        }
+
+        // Récupérer ou créer le portefeuille de l'utilisateur
+        $wallet = $walletModel->where('user_id', $code['user_id'])->first();
+        if (!$wallet) {
+            $walletModel->insert(['user_id' => $code['user_id'], 'solde' => 0]);
+            $wallet = $walletModel->where('user_id', $code['user_id'])->first();
+        }
+
+        $montant = (float) $code['value'];
+
+        // Créditer le portefeuille
+        $walletModel->update($wallet['id'], [
+            'solde' => ((float) $wallet['solde']) + $montant,
+        ]);
+
+        // Créer une transaction (insert via table to avoid Model->insert binding issues)
+        $transactionModel->db->table('wallet_transactions')->insert([
+            'wallet_id' => $wallet['id'],
+            'montant' => $montant,
+            'type' => 'recharge',
+            'user_id' => $code['user_id'],
+        ]);
+
+        // Marquer le code comme utilisé
+        $walletCodeModel->update($id, [
+            'status' => 'used',
             'approved_at' => date('Y-m-d H:i:s')
         ]);
 
-        // Ici vous pouvez ajouter la logique de créditer le compte user si souhaité
-
-        return redirect()->to('/admin/wallet?filter=pending')->with('success', 'Code approuvé.');
+        return redirect()->to('/admin/wallet?filter=pending')->with('success', 'Code approuvé et compte crédité avec succès.');
     }
 
     // Rejeter un code
