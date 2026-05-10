@@ -1,10 +1,5 @@
-========================================
-SQL À EXÉCUTER
-========================================
 
-Ce script est aligné avec les modèles et contrôleurs présents dans le dépôt.
-
-CREATE DATABASE IF NOT EXISTS regime CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE regime;
 USE regime;
 
 CREATE TABLE IF NOT EXISTS abonnement (
@@ -18,10 +13,6 @@ CREATE TABLE IF NOT EXISTS type_user (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   code VARCHAR(50) NOT NULL UNIQUE
 );
-
-INSERT IGNORE INTO type_user (id, code) VALUES
-(1, 'user'),
-(2, 'admin');
 
 CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -62,9 +53,11 @@ CREATE TABLE IF NOT EXISTS wallet_transactions (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   wallet_id INT UNSIGNED NOT NULL,
   montant DECIMAL(12,2) NOT NULL,
-  type_transaction ENUM('recharge', 'achat') NOT NULL,
-  date_transaction DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_transaction_wallet FOREIGN KEY (wallet_id) REFERENCES wallet(id) ON DELETE CASCADE
+  type ENUM('recharge', 'achat') NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  user_id INT UNSIGNED NULL,
+  CONSTRAINT fk_transaction_wallet FOREIGN KEY (wallet_id) REFERENCES wallet(id) ON DELETE CASCADE,
+  CONSTRAINT fk_transaction_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS code_recharge (
@@ -170,35 +163,3 @@ CREATE TABLE IF NOT EXISTS parameters (
   value TEXT,
   description VARCHAR(255)
 );
-
-INSERT IGNORE INTO abonnement (id, libelle, prix, reduction) VALUES
-(1, 'Standard', 0.00, 0.00),
-(2, 'Gold', 0.00, 0.00);
-
-INSERT IGNORE INTO aliment (nom, description, image, type_aliment) VALUES
-('Poulet', NULL, NULL, 'volaille'),
-('Boeuf', NULL, NULL, 'viande'),
-('Poisson blanc', NULL, NULL, 'poisson'),
-('Saumon', NULL, NULL, 'poisson'),
-('Jambon', NULL, NULL, 'viande'),
-('Dinde', NULL, NULL, 'volaille');
-
-INSERT IGNORE INTO sport (nom, variation_poids, duree, description) VALUES
-('Marche rapide', 3.50, 30, 'Marche à 5.5 km/h'),
-('Course', 8.00, 30, 'Course à 9.7 km/h'),
-('Vélo', 6.00, 45, 'Vélo à intensité modérée'),
-('Natation', 7.00, 45, 'Natation modérée'),
-('Musculation', 6.00, 60, 'Entraînement avec poids');
-
-INSERT IGNORE INTO wallet_codes (code, value, status) VALUES
-('CODE2024-001', 10000.00, 'available'),
-('CODE2024-002', 20000.00, 'available'),
-('CODE2024-003', 50000.00, 'available');
-
-INSERT IGNORE INTO parameters (`key`, value, description) VALUES
-('prix_base_regime_court', '1000', 'Prix par jour pour régime <= 7 jours'),
-('prix_base_regime_moyen', '900', 'Prix par jour pour régime 8-30 jours'),
-('prix_base_regime_long', '800', 'Prix par jour pour régime > 30 jours'),
-('devise', 'Ar', 'Devise locale');
-
-ALTER TABLE regime ADD COLUMN IF NOT EXISTS description TEXT NULL AFTER prix;

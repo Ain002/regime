@@ -33,6 +33,11 @@
     </div>
 
     <div>
+        <label>Prix (Ar)</label>
+        <input type="number" step="0.01" min="0" name="prix" placeholder="Prix du régime" value="<?= old('prix') ?>" required>
+    </div>
+
+    <div>
         <label>Description</label>
         <textarea name="description" placeholder="Description du régime"><?= old('description') ?></textarea>
     </div>

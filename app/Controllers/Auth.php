@@ -52,11 +52,12 @@ class Auth extends BaseController
                 'user_id' => $user['id'],
                 'nom' => ($user['prenom'] ?? '') . ' ' . $user['nom'],
                 'email' => $user['email'] ?? null,
+                'user' => $user,
                 'isAdmin' => true,
                 'isLoggedIn' => true,
             ]);
 
-            return redirect()->to('/admin')->with('success', 'Bienvenue admin');
+            return redirect()->to('/admin/dashboard')->with('success', 'Bienvenue admin');
         }
 
         return redirect()->back()->withInput()->with('error', 'Identifiants admin invalides');
@@ -99,6 +100,7 @@ class Auth extends BaseController
                 'user_id' => $user['id'],
                 'nom' => $displayName,
                 'email' => $user['email'],
+                'user' => $user,
                 'isLoggedIn' => true,
             ]);
 
@@ -107,7 +109,7 @@ class Auth extends BaseController
                 return redirect()->to('/profile/complete')->with('success', 'Bienvenue ' . $displayName . '! Complétez votre profil.');
             }
 
-            return redirect()->to('/')->with('success', 'Bienvenue ' . $displayName . '!');
+            return redirect()->to('/recommendation')->with('success', 'Bienvenue ' . $displayName . '!');
         } else {
             // Identifiants incorrects
             return redirect()->back()->withInput()->with('error', 'Email ou mot de passe incorrect.');
@@ -167,6 +169,7 @@ class Auth extends BaseController
                 'user_id' => $user['id'],
                 'nom' => $displayName,
                 'email' => $user['email'],
+                'user' => $user,
                 'isLoggedIn' => true,
             ]);
 
@@ -213,6 +216,9 @@ class Auth extends BaseController
         // Update profile using AuthFunctions
         $this->authFunctions->completeProfile($session->get('user_id'), $taille, $poids, $abonnement_id);
 
-        return redirect()->to('/')->with('success', 'Profil complété.');
+        $updatedUser = $this->authFunctions->getUserById($session->get('user_id'));
+        $session->set('user', $updatedUser);
+
+        return redirect()->to('/recommendation')->with('success', 'Profil complété. Découvrez vos régimes recommandés!');
     }
 }

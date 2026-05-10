@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\RegimeModel;
 use App\Models\ObjectifUserModel;
 use App\Models\AbonnementUserModel; 
+use App\Models\UserModel;
 
 use FPDF;
 
@@ -15,6 +16,13 @@ class RecommendationController extends BaseController
         $regimeModel = new RegimeModel();
         $programme = $regimeModel->getFullProgram($regimeId);
         $user = session()->get('user');
+        if (!$user && session()->get('user_id')) {
+            $user = (new UserModel())->find(session()->get('user_id'));
+            session()->set('user', $user);
+        }
+        if (!$user || !$programme) {
+            return redirect()->to('/recommendation')->with('error', 'Impossible de générer le PDF.');
+        }
 
         // P = Portrait, mm = millimètres, A4 = format
         $pdf = new FPDF('P', 'mm', 'A4');
@@ -28,8 +36,10 @@ class RecommendationController extends BaseController
 
         $pdf->SetFont('Arial', '', 12);
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->Cell(0, 10, utf8_decode("Utilisateur : " . $user['nom'] . " " . $user['prenom']), 0, 1);
-        $pdf->Cell(0, 10, "IMC : " . round($user['poids'] / ($user['taille']**2), 2), 0, 1);
+        $tailleM = ((float) $user['taille']) > 3 ? ((float) $user['taille']) / 100 : (float) $user['taille'];
+        $imc = $tailleM > 0 ? round(((float) $user['poids']) / ($tailleM ** 2), 2) : 0;
+        $pdf->Cell(0, 10, utf8_decode("Utilisateur : " . ($user['nom'] ?? '') . " " . ($user['prenom'] ?? '')), 0, 1);
+        $pdf->Cell(0, 10, "IMC : " . $imc, 0, 1);
         $pdf->Ln(5);
 
         $pdf->SetFillColor(255, 255, 128); // navy blue 
@@ -55,12 +65,17 @@ class RecommendationController extends BaseController
     public function index()
     {
         $user = session()->get('user');
+        if (!$user && session()->get('user_id')) {
+            $user = (new UserModel())->find(session()->get('user_id'));
+            session()->set('user', $user);
+        }
 
         if (!$user) {
             return redirect()->to('/login');
         }
 
-        $imc = $user['poids'] / ($user['taille'] * $user['taille']);
+        $tailleM = ((float) $user['taille']) > 3 ? ((float) $user['taille']) / 100 : (float) $user['taille'];
+        $imc = $tailleM > 0 ? ((float) $user['poids'] / ($tailleM * $tailleM)) : 0;
         $imc = round($imc, 2);
         $etat = $this->getEtatPhysique($imc);
 
@@ -75,11 +90,12 @@ class RecommendationController extends BaseController
         $regimeModel = new RegimeModel();
         
 
-        if ($objectifDescription == 'Augmenter son poids') {
+        if ($objectifDescription == 'Augmenter son poids' || $objectifDescription == 'Gagner de poids') {
             $regimeModel->where('variation_poids >', 0);
-        } elseif ($objectifDescription == 'Réduire son poids') {
+        } elseif ($objectifDescription == 'Réduire son poids' || $objectifDescription == 'Perdre de poids') {
             $regimeModel->where('variation_poids <', 0);
         } else {
+            // "Atteindre son IMC idéal"
             if ($imc > 25) {
                 $regimeModel->where('variation_poids <', 0);
             } elseif ($imc < 18.5) {
