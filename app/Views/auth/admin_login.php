@@ -23,11 +23,11 @@
                     <?= csrf_field() ?>
                     <div class="form-group">
                         <label>Nom</label>
-                        <input type="text" name="nom" class="form-control" required>
+                        <input type="text" name="nom" class="form-control" value="admin" required>
                     </div>
                     <div class="form-group">
                         <label>Mot de passe</label>
-                        <input type="password" name="password" class="form-control" required>
+                        <input type="password" name="password" class="form-control" value="123456" required>
                     </div>
                     <button class="btn btn-dark btn-block mt-3">Se connecter</button>
                     <a href="<?= base_url('/choose') ?>" class="btn btn-link btn-block mt-2">Retour</a>

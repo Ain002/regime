@@ -3,9 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\WalletModel;
 use App\Models\WalletCodeModel;
-use App\Models\WalletTransactionModel;
 use App\Models\UserModel;
 
 class CodeRechargeController extends BaseController
@@ -29,9 +27,7 @@ class CodeRechargeController extends BaseController
 
     public function validateCode()
     {
-        $walletModel = new WalletModel();
         $walletCodeModel = new WalletCodeModel();
-        $walletTransactionModel = new WalletTransactionModel();
 
         $code = strtoupper(trim((string) $this->request->getPost('code')));
         $userID = session()->get('user_id');
@@ -44,12 +40,7 @@ class CodeRechargeController extends BaseController
             return redirect()->back()->with('error', 'Veuillez entrer un code.');
         }
 
-        $wallet = $walletModel->where('user_id', $userID)->first();
-        if (!$wallet) {
-            $walletModel->insert(['user_id' => $userID, 'solde' => 0]);
-            $wallet = $walletModel->where('user_id', $userID)->first();
-        }
-
+        // Chercher le code avec status 'available'
         $codeData = $walletCodeModel
             ->where('code', $code)
             ->where('status', 'available')
@@ -64,24 +55,14 @@ class CodeRechargeController extends BaseController
             return redirect()->back()->with('error', 'Montant du code invalide.');
         }
 
-        $walletModel->update($wallet['id'], [
-            'solde' => ((float) $wallet['solde']) + $montant,
-        ]);
-
+        // Créer une demande de recharge en attente d'approbation admin
         $walletCodeModel->update($codeData['id'], [
-            'status' => 'used',
+            'status' => 'pending',
             'user_id' => $userID,
-            'approved_at' => date('Y-m-d H:i:s'),
+            'requested_at' => date('Y-m-d H:i:s'),
         ]);
 
-        $walletTransactionModel->insert([
-            'wallet_id' => $wallet['id'],
-            'montant' => $montant,
-            'type' => 'recharge',
-            'user_id' => $userID,
-        ]);
-
-        return redirect()->to('/recommendation')->with('success', 'Votre porte-monnaie a été rechargé avec succès !');
+        return redirect()->back()->with('success', 'Votre demande de recharge a été soumise. En attente de confirmation de l\'administrateur.');
     }
 }
 
