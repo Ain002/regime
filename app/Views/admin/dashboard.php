@@ -137,7 +137,7 @@
 
 <?php $this->section('scripts') ?>
 <script>
-    $(document).ready(function() {
+    $(function() {
         $('#dataTable').DataTable({
             pageLength: 10,
             lengthChange: false,
@@ -145,65 +145,69 @@
             ordering: false,
             info: false
         });
-    });
+        if (typeof Chart === 'undefined') {
+            return;
+        }
 
-    Chart.defaults.font.family = 'Nunito, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-    Chart.defaults.color = '#858796';
+        Chart.defaults.global.defaultFontFamily = 'Nunito, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
 
-    const revenueLabels = <?= json_encode(array_values(array_map(static fn($label) => ucfirst((string) $label), array_keys($revenueByType ?? [])))) ?>;
-    const revenueValues = <?= json_encode(array_values($revenueByType ?? [])) ?>;
-    const chartLabels = revenueLabels.length ? revenueLabels : ['Aucune donnée'];
-    const chartValues = revenueValues.length ? revenueValues : [0];
+        const revenueLabels = <?= json_encode(array_values(array_map(static fn($label) => ucfirst((string) $label), array_keys($revenueByType ?? [])))) ?>;
+        const revenueValues = <?= json_encode(array_values($revenueByType ?? [])) ?>;
+        const chartLabels = revenueLabels.length ? revenueLabels : ['Aucune donnée'];
+        const chartValues = revenueValues.length ? revenueValues : [0];
 
-    new Chart(document.getElementById('revenueChart').getContext('2d'), {
-        type: 'line',
-        data: {
-            labels: chartLabels,
-            datasets: [{
-                label: 'Revenus (Ar)',
-                tension: 0.3,
-                backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                pointRadius: 3,
-                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
-                pointBorderColor: 'rgba(78, 115, 223, 1)',
-                pointHoverRadius: 3,
-                pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
-                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
-                pointHitRadius: 10,
-                pointBorderWidth: 2,
-                data: chartValues
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } },
-                y: { ticks: { beginAtZero: true } }
+        new Chart(document.getElementById('revenueChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Revenus (Ar)',
+                    lineTension: 0.3,
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    pointRadius: 3,
+                    pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                    pointBorderColor: 'rgba(78, 115, 223, 1)',
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
+                    pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: chartValues
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: { display: false },
+                scales: {
+                    xAxes: [{ gridLines: { display: false }, ticks: { maxTicksLimit: 8 } }],
+                    yAxes: [{ ticks: { beginAtZero: true } }]
+                }
             }
-        }
-    });
+        });
 
-    new Chart(document.getElementById('codeStatusChart').getContext('2d'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Disponibles', 'Utilisés', 'En attente'],
-            datasets: [{
-                data: [
-                    <?= (int) ($codesAvailable ?? 0) ?>,
-                    <?= (int) ($codesUsed ?? 0) ?>,
-                    <?= (int) ($codesPending ?? 0) ?>
-                ],
-                backgroundColor: ['#1cc88a', '#36b9cc', '#f6c23e'],
-                borderColor: '#ffffff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-        }
+        new Chart(document.getElementById('codeStatusChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Disponibles', 'Utilisés', 'En attente'],
+                datasets: [{
+                    data: [
+                        <?= (int) ($codesAvailable ?? 0) ?>,
+                        <?= (int) ($codesUsed ?? 0) ?>,
+                        <?= (int) ($codesPending ?? 0) ?>
+                    ],
+                    backgroundColor: ['#1cc88a', '#36b9cc', '#f6c23e'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: { position: 'bottom' },
+                cutoutPercentage: 70
+            }
+        });
     });
 </script>
 <?php $this->endSection() ?>

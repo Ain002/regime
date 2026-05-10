@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\RegimeModel;
-use App\Models\CodeRechargeModel;
+use App\Models\WalletCodeModel;
 use App\Models\UserModel;
 use App\Models\WalletTransactionModel;
 use App\Models\AbonnementUserModel;
@@ -24,7 +24,7 @@ class AdminDashboardController extends BaseController
         $totalRegimes = count($regimeModel->findAll());
 
         // Statistiques des codes recharge
-        $codeModel = new CodeRechargeModel();
+        $codeModel = new WalletCodeModel();
         $allCodes = $codeModel->findAll();
         $totalCodes = count($allCodes);
         $codesAvailable = count(array_filter($allCodes, fn($c) => ($c['status'] ?? 'available') === 'available'));

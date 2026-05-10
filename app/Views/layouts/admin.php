@@ -14,7 +14,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700" rel="stylesheet">
     <link href="<?= base_url('template/css/sb-admin-2.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('template/vendor/datatables/dataTables.bootstrap4.min.css') ?>" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
 </head>
 
 <body id="page-top">
@@ -91,7 +90,6 @@
 
                 <div class="container-fluid">
                     <?= $this->renderSection('content') ?>
-                    <?= $this->renderSection('scripts') ?>
                 </div>
 
             </div>
@@ -110,8 +108,10 @@
     <script src="<?= base_url('template/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('template/vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
     <script src="<?= base_url('template/js/sb-admin-2.min.js') ?>"></script>
+    <script src="<?= base_url('template/vendor/chart.js/Chart.min.js') ?>"></script>
     <script src="<?= base_url('template/vendor/datatables/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= base_url('template/vendor/datatables/dataTables.bootstrap4.min.js') ?>"></script>
+    <?= $this->renderSection('scripts') ?>
 </body>
 
 </html>
