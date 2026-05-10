@@ -66,7 +66,7 @@
                         <small class="text-muted">Codes en attente:</small>
                         <h4><?= $codesPending ?? 0 ?></h4>
                     </div>
-                    <a href="/admin/wallet" class="btn btn-sm btn-primary mt-3 w-100">Gérer les codes</a>
+                    <a href="<?= site_url('admin/wallet') ?>" class="btn btn-sm btn-primary mt-3 w-100">Gérer les codes</a>
                 </div>
             </div>
         </div>
@@ -147,17 +147,17 @@
     <!-- Management Links -->
     <div class="row">
         <div class="col-md-4 mb-3">
-            <a href="/regime" class="btn btn-outline-primary w-100">
+            <a href="<?= site_url('admin/regime') ?>" class="btn btn-outline-primary w-100">
                 💪 Gérer les Régimes
             </a>
         </div>
         <div class="col-md-4 mb-3">
-            <a href="/aliment" class="btn btn-outline-success w-100">
+            <a href="<?= site_url('admin/aliment') ?>" class="btn btn-outline-success w-100">
                 🍽️ Gérer les Aliments
             </a>
         </div>
         <div class="col-md-4 mb-3">
-            <a href="/activity" class="btn btn-outline-info w-100">
+            <a href="<?= site_url('admin/activity') ?>" class="btn btn-outline-info w-100">
                 ⚽ Gérer les Activités
             </a>
         </div>

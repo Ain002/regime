@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\RegimeModel;
-use App\Models\CodeRechargeModel;
+use App\Models\WalletCodeModel;
 use App\Models\UserModel;
 use App\Models\WalletTransactionModel;
 use App\Models\AbonnementUserModel;
@@ -24,24 +24,27 @@ class AdminDashboardController extends BaseController
         $totalRegimes = count($regimeModel->findAll());
 
         // Statistiques des codes recharge
-        $codeModel = new CodeRechargeModel();
+        $codeModel = new WalletCodeModel();
         $allCodes = $codeModel->findAll();
         $totalCodes = count($allCodes);
-        $codesUsed = count(array_filter($allCodes, fn($c) => !empty($c['used'])));
-        $codesPending = count(array_filter($allCodes, fn($c) => $c['statut'] === 'pending'));
+        $codesAvailable = count(array_filter($allCodes, fn($c) => ($c['status'] ?? 'available') === 'available'));
+        $codesUsed = count(array_filter($allCodes, fn($c) => ($c['status'] ?? '') === 'used'));
+        $codesPending = count(array_filter($allCodes, fn($c) => ($c['status'] ?? '') === 'pending'));
+        $codesApproved = count(array_filter($allCodes, fn($c) => ($c['status'] ?? '') === 'approved'));
+        $codesRejected = count(array_filter($allCodes, fn($c) => ($c['status'] ?? '') === 'rejected'));
 
         // Statistiques des utilisateurs
         $userModel = new UserModel();
-        $totalUsers = count($userModel->where('type_user_id', 1)->findAll());
+        $totalUsers = $userModel->where('type_user_id', 1)->countAllResults();
 
         // Statistiques des achats Gold
         $abbonModel = new AbonnementUserModel();
-        $goldPurchases = count($abbonModel->findAll());
+        $goldPurchases = $abbonModel->countAllResults();
 
         // Statistiques des transactions portefeuille
         $transModel = new WalletTransactionModel();
-        $totalTransactions = count($transModel->findAll());
-        $transactions = $transModel->orderBy('created_at', 'DESC')->limit(10)->findAll();
+        $totalTransactions = $transModel->countAllResults();
+        $transactions = $transModel->orderBy('created_at', 'DESC')->findAll(10);
 
         // Revenus totaux par type
         $allTransactions = $transModel->findAll();
@@ -57,8 +60,11 @@ class AdminDashboardController extends BaseController
         $data = [
             'totalRegimes' => $totalRegimes,
             'totalCodes' => $totalCodes,
+            'codesAvailable' => $codesAvailable,
             'codesUsed' => $codesUsed,
             'codesPending' => $codesPending,
+            'codesApproved' => $codesApproved,
+            'codesRejected' => $codesRejected,
             'totalUsers' => $totalUsers,
             'goldPurchases' => $goldPurchases,
             'totalTransactions' => $totalTransactions,

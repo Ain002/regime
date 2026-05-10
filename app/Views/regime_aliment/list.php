@@ -6,7 +6,7 @@
             <h2>🍽️ Composition: <?= esc($regime['nom']) ?></h2>
             <p class="text-muted">Gérez la composition des aliments du régime (% viande, poisson, volaille)</p>
         </div>
-        <a href="/regime-aliment/create/<?= $regime['id'] ?>" class="btn btn-primary">➕ Ajouter un aliment</a>
+        <a href="<?= site_url('admin/regime-aliment/create/' . $regime['id']) ?>" class="btn btn-primary">➕ Ajouter un aliment</a>
     </div>
 
     <?php if (session()->has('success')): ?>
@@ -95,8 +95,8 @@
                             </div>
 
                             <div class="d-flex gap-2 mt-3">
-                                <a href="/regime-aliment/edit/<?= $regime['id'] ?>/<?= $aliment['aliment_id'] ?>" class="btn btn-sm btn-warning">✏️ Modifier</a>
-                                <a href="/regime-aliment/delete/<?= $regime['id'] ?>/<?= $aliment['aliment_id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?')">🗑️ Supprimer</a>
+                                <a href="<?= site_url('admin/regime-aliment/edit/' . $regime['id'] . '/' . $aliment['aliment_id']) ?>" class="btn btn-sm btn-warning">✏️ Modifier</a>
+                                <a href="<?= site_url('admin/regime-aliment/delete/' . $regime['id'] . '/' . $aliment['aliment_id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?')">🗑️ Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -105,13 +105,13 @@
         </div>
     <?php else: ?>
         <div class="alert alert-info">
-            Aucun aliment assigné à ce régime. <a href="/regime-aliment/create/<?= $regime['id'] ?>" class="btn btn-sm btn-primary">Ajouter un aliment</a>
+            Aucun aliment assigné à ce régime. <a href="<?= site_url('admin/regime-aliment/create/' . $regime['id']) ?>" class="btn btn-sm btn-primary">Ajouter un aliment</a>
         </div>
     <?php endif; ?>
 
     <div class="mt-4">
-        <a href="/regime" class="btn btn-secondary">← Retour aux régimes</a>
-        <a href="/regime-sport/<?= $regime['id'] ?>" class="btn btn-info">⚽ Voir les sports</a>
+        <a href="<?= site_url('admin/regime') ?>" class="btn btn-secondary">← Retour aux régimes</a>
+        <a href="<?= site_url('admin/regime-sport/' . $regime['id']) ?>" class="btn btn-info">⚽ Voir les sports</a>
     </div>
 </div>
 <?php $this->endSection() ?>

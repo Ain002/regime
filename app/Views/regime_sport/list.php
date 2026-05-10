@@ -6,7 +6,7 @@
             <h2>🏃 Sports du régime: <?= esc($regime['nom']) ?></h2>
             <p class="text-muted">Gérez les activités sportives associées à ce régime</p>
         </div>
-        <a href="/regime-sport/create/<?= $regime['id'] ?>" class="btn btn-primary">➕ Ajouter un sport</a>
+        <a href="<?= site_url('admin/regime-sport/create/' . $regime['id']) ?>" class="btn btn-primary">➕ Ajouter un sport</a>
     </div>
 
     <?php if (session()->has('success')): ?>
@@ -57,8 +57,8 @@
                             </div>
 
                             <div class="d-flex gap-2">
-                                <a href="/regime-sport/edit/<?= $regime['id'] ?>/<?= $sport['sport_id'] ?>" class="btn btn-sm btn-warning">✏️ Edit</a>
-                                <a href="/regime-sport/delete/<?= $regime['id'] ?>/<?= $sport['sport_id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?')">🗑️ Delete</a>
+                                <a href="<?= site_url('admin/regime-sport/edit/' . $regime['id'] . '/' . $sport['sport_id']) ?>" class="btn btn-sm btn-warning">✏️ Edit</a>
+                                <a href="<?= site_url('admin/regime-sport/delete/' . $regime['id'] . '/' . $sport['sport_id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?')">🗑️ Delete</a>
                             </div>
                         </div>
                     </div>
@@ -67,12 +67,12 @@
         </div>
     <?php else: ?>
         <div class="alert alert-info">
-            Aucun sport assigné à ce régime. <a href="/regime-sport/create/<?= $regime['id'] ?>" class="btn btn-sm btn-primary">Ajouter un sport</a>
+            Aucun sport assigné à ce régime. <a href="<?= site_url('admin/regime-sport/create/' . $regime['id']) ?>" class="btn btn-sm btn-primary">Ajouter un sport</a>
         </div>
     <?php endif; ?>
 
     <div class="mt-4">
-        <a href="/regime" class="btn btn-secondary">← Retour aux régimes</a>
+        <a href="<?= site_url('admin/regime') ?>" class="btn btn-secondary">← Retour aux régimes</a>
     </div>
 </div>
 <?php $this->endSection() ?>

@@ -13,7 +13,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="/regime-aliment/store/<?= $regime['id'] ?>" method="POST" class="form mt-4">
+    <form action="<?= site_url('admin/regime-aliment/store/' . $regime['id']) ?>" method="POST" class="form mt-4">
         <?= csrf_field() ?>
 
         <div class="mb-3">
@@ -69,7 +69,7 @@
 
         <div class="d-flex gap-2 mt-4">
             <button type="submit" class="btn btn-primary">✅ Ajouter l'aliment</button>
-            <a href="/regime-aliment/<?= $regime['id'] ?>" class="btn btn-secondary">❌ Annuler</a>
+            <a href="<?= site_url('admin/regime-aliment/' . $regime['id']) ?>" class="btn btn-secondary">❌ Annuler</a>
         </div>
     </form>
 </div>
