@@ -32,12 +32,18 @@ $routes->post('/profile/complete', 'Auth::completeProfileSubmit');
 // ============================================================================
 // --- FRONT OFFICE (CLIENT) ---
 // ============================================================================
+//profile
+$routes->group('profile', function($routes) {
+    $routes->get('/', 'ProfileController::index');
+    $routes->post('update', 'ProfileController::update');
+});
 
 // Recommandations & Régimes
-$routes->get('/recommendation', 'RecommendationController::index');
+$routes->get('/recommendation', 'RecommendationController::index'); 
+$routes->get('/recommendation/detail/(:num)', 'RecommendationController::detail/$1'); 
 $routes->get('/recommendation/show/(:num)', 'RecommendationController::show/$1');
-$routes->get('/recommendation/buy/(:num)', 'RecommendationController::buy/$1');
-$routes->get('/recommendation/export/(:num)', 'RecommendationController::exportFPDF/$1');
+ $routes->get('/recommendation/buy/(:num)', 'RecommendationController::buy/$1');
+ $routes->get('/recommendation/export/(:num)', 'RecommendationController::exportFPDF/$1');
 
 // Portefeuille & Codes
 $routes->get('/wallet', 'WalletController::index');

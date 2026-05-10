@@ -1,3 +1,4 @@
+-- Active: 1770848308017@@127.0.0.1@3306@regime
 USE regime;
 
 -- -----------------------------------------------------
@@ -107,6 +108,9 @@ INSERT IGNORE INTO regime_sport (regime_id, sport_id, frequence_semaine, duree_m
 INSERT IGNORE INTO wallet (user_id, solde) VALUES
 (2, 50000.00),
 (3, 72000.00);
+
+INSERT IGNORE INTO wallet (user_id, solde) VALUES
+(3, 50000.00);
 
 INSERT IGNORE INTO wallet_transactions (wallet_id, montant, type, created_at, user_id) VALUES
 (1, 10000.00, 'recharge', DATE_SUB(NOW(), INTERVAL 30 DAY), 2),

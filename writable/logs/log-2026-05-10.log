@@ -864,3 +864,127 @@ in SYSTEMPATH\Database\BaseBuilder.php on line 3528.
  9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
 10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
 11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:16:01 --> TypeError: CodeIgniter\Database\BaseBuilder::setBind(): Argument #1 ($key) must be of type string, int given, called in /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php on line 1575
+[Method: POST, Route: subscription/gold]
+in SYSTEMPATH/Database/BaseBuilder.php on line 3528.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1575): CodeIgniter\Database\BaseBuilder->setBind()
+ 2 SYSTEMPATH/Model.php(326): CodeIgniter\Database\BaseBuilder->set()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AbonnementController.php(61): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AbonnementController->acheterGold()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:16:07 --> TypeError: CodeIgniter\Database\BaseBuilder::setBind(): Argument #1 ($key) must be of type string, int given, called in /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php on line 1575
+[Method: POST, Route: subscription/gold]
+in SYSTEMPATH/Database/BaseBuilder.php on line 3528.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1575): CodeIgniter\Database\BaseBuilder->setBind()
+ 2 SYSTEMPATH/Model.php(326): CodeIgniter\Database\BaseBuilder->set()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AbonnementController.php(61): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AbonnementController->acheterGold()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:17:11 --> TypeError: CodeIgniter\Database\BaseBuilder::setBind(): Argument #1 ($key) must be of type string, int given, called in /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php on line 1575
+[Method: POST, Route: subscription/gold]
+in SYSTEMPATH/Database/BaseBuilder.php on line 3528.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1575): CodeIgniter\Database\BaseBuilder->setBind()
+ 2 SYSTEMPATH/Model.php(326): CodeIgniter\Database\BaseBuilder->set()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AbonnementController.php(61): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AbonnementController->acheterGold()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:23:06 --> ErrorException: Undefined variable $programme
+[Method: GET, Route: recommendation]
+in APPPATH/Views/recommendation/index.php on line 345.
+ 1 APPPATH/Views/recommendation/index.php(345): CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 SYSTEMPATH/View/View.php(240): include('/opt/lampp/htdocs/S4/regime/app/Views/recommendation/index.php')
+ 3 SYSTEMPATH/View/View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1250): CodeIgniter\View\View->render()
+ 5 APPPATH/Controllers/RecommendationController.php(126): view()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\RecommendationController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:23:08 --> ErrorException: Undefined variable $programme
+[Method: GET, Route: recommendation]
+in APPPATH/Views/recommendation/index.php on line 345.
+ 1 APPPATH/Views/recommendation/index.php(345): CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 SYSTEMPATH/View/View.php(240): include('/opt/lampp/htdocs/S4/regime/app/Views/recommendation/index.php')
+ 3 SYSTEMPATH/View/View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1250): CodeIgniter\View\View->render()
+ 5 APPPATH/Controllers/RecommendationController.php(126): view()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\RecommendationController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:23:10 --> ErrorException: Undefined variable $programme
+[Method: GET, Route: recommendation]
+in APPPATH/Views/recommendation/index.php on line 345.
+ 1 APPPATH/Views/recommendation/index.php(345): CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 SYSTEMPATH/View/View.php(240): include('/opt/lampp/htdocs/S4/regime/app/Views/recommendation/index.php')
+ 3 SYSTEMPATH/View/View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1250): CodeIgniter\View\View->render()
+ 5 APPPATH/Controllers/RecommendationController.php(126): view()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\RecommendationController->index()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:46:35 --> TypeError: CodeIgniter\Database\BaseBuilder::setBind(): Argument #1 ($key) must be of type string, int given, called in /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php on line 1575
+[Method: POST, Route: subscription/gold]
+in SYSTEMPATH/Database/BaseBuilder.php on line 3528.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1575): CodeIgniter\Database\BaseBuilder->setBind()
+ 2 SYSTEMPATH/Model.php(326): CodeIgniter\Database\BaseBuilder->set()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AbonnementController.php(61): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AbonnementController->acheterGold()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:52:17 --> TypeError: CodeIgniter\Database\BaseBuilder::setBind(): Argument #1 ($key) must be of type string, int given, called in /opt/lampp/htdocs/S4/regime/system/Database/BaseBuilder.php on line 1575
+[Method: POST, Route: subscription/gold]
+in SYSTEMPATH/Database/BaseBuilder.php on line 3528.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1575): CodeIgniter\Database\BaseBuilder->setBind()
+ 2 SYSTEMPATH/Model.php(326): CodeIgniter\Database\BaseBuilder->set()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AbonnementController.php(61): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AbonnementController->acheterGold()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+CRITICAL - 2026-05-10 21:58:24 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "profile/index.php"
+[Method: GET, Route: profile]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 39.
+ 1 SYSTEMPATH/View/View.php(228): CodeIgniter\Exceptions\FrameworkException::forInvalidFile()
+ 2 SYSTEMPATH/Common.php(1250): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/ProfileController.php(20): view()
+ 4 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\ProfileController->index()
+ 5 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
