@@ -6,6 +6,7 @@ use App\Models\RegimeModel;
 use App\Models\ObjectifUserModel;
 use App\Models\AbonnementUserModel; 
 use App\Models\UserModel;
+use App\Models\WalletModel;
 
 use FPDF;
 
@@ -62,6 +63,7 @@ class RecommendationController extends BaseController
         $this->response->setHeader('Content-Type', 'application/pdf');
         $pdf->Output('D', 'Regime_' . $programme['nom'] . '.pdf');
     }
+    
     public function index()
     {
         $user = session()->get('user');
@@ -83,13 +85,14 @@ class RecommendationController extends BaseController
         $objectif = $objectifModel->getLatestObjectifByUserId($user['id']);
         $objectifDescription = $objectif['description'] ?? '';
 
- 
         $aboModel = new AbonnementUserModel();
         $isGold = $aboModel->isUserGold($user['id']); 
 
+        $walletModel = new WalletModel();
+        $solde = $walletModel->getSoldeByUserId($user['id']) ?? 0;
+
         $regimeModel = new RegimeModel();
         
-
         if ($objectifDescription == 'Augmenter son poids' || $objectifDescription == 'Gagner de poids') {
             $regimeModel->where('variation_poids >', 0);
         } elseif ($objectifDescription == 'Réduire son poids' || $objectifDescription == 'Perdre de poids') {
@@ -129,6 +132,8 @@ class RecommendationController extends BaseController
             'imc'        => $imc,
             'etat'       => $etat,
             'objectif'   => $objectifDescription,
+            'solde'      => $solde,
+            'isGold'     => $isGold,
             'programmes' => $programmes
         ]);
     }

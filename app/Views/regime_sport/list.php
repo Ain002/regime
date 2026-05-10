@@ -1,3 +1,5 @@
+<?php $this->extend('layouts/admin') ?>
+<?php $this->section('content') ?>
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -73,3 +75,4 @@
         <a href="/regime" class="btn btn-secondary">← Retour aux régimes</a>
     </div>
 </div>
+<?php $this->endSection() ?>

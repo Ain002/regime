@@ -1,11 +1,13 @@
+<?php $this->extend('layouts/admin') ?>
+<?php $this->section('content') ?>
 <div class="container mt-5">
     <h2>Modifier les détails du sport</h2>
     <p class="text-muted">Régime: <?= esc($regime['nom']) ?> | Sport: <?= esc($regimeSport['nom']) ?></p>
 
-    <?php if (isset($errors)): ?>
+    <?php if (session()->has('errors')): ?>
         <div class="alert alert-danger">
             <ul>
-                <?php foreach ($errors as $error): ?>
+                <?php foreach (session('errors') as $error): ?>
                     <li><?= esc($error) ?></li>
                 <?php endforeach; ?>
             </ul>
@@ -47,3 +49,4 @@
         </div>
     </form>
 </div>
+<?php $this->endSection() ?>

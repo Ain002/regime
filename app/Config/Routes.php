@@ -4,6 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /**
  * @var RouteCollection $routes
+ * Restructured routes for Régime App
  */
 
 // --- INITIALISATION BASE DE DONNÉES ---
@@ -22,74 +23,116 @@ $routes->get('/login', 'Auth::login');
 $routes->post('/auth/authenticate', 'Auth::authenticate');
 $routes->get('/logout', 'Auth::logout');
 
-// Inscription & Profil (Séparation en 2 pages demandée par le sujet)
+// Inscription & Profil
 $routes->get('/register', 'Auth::register');
 $routes->post('/auth/register', 'Auth::registerSubmit');
 $routes->get('/profile/complete', 'Auth::completeProfile');
 $routes->post('/profile/complete', 'Auth::completeProfileSubmit');
 
-// --- FRONT OFFICE (FONCTIONNALITÉS CLIENT) ---
+// ============================================================================
+// --- FRONT OFFICE (CLIENT) ---
+// ============================================================================
 
-// Suggestions de régimes & Activités (Ton travail actuel)
+// Recommandations & Régimes
 $routes->get('/recommendation', 'RecommendationController::index');
+$routes->get('/recommendation/show/(:num)', 'RecommendationController::show/$1');
+$routes->get('/recommendation/buy/(:num)', 'RecommendationController::buy/$1');
 $routes->get('/recommendation/export/(:num)', 'RecommendationController::exportFPDF/$1');
 
-// Porte-monnaie & Codes
-$routes->get('/code', 'CodeRechargeController::saisieCode');
-$routes->post('/wallet/request/code', 'WalletCodeController::requestCode');
+// Portefeuille & Codes
+$routes->get('/wallet', 'WalletController::index');
 $routes->get('/wallet/request', 'WalletCodeController::requestForm');
+$routes->post('/wallet/request/code', 'WalletCodeController::requestCode');
+$routes->get('/code', 'CodeRechargeController::saisieCode');
+$routes->post('/code/validate', 'CodeRechargeController::validateCode');
 
-// Option Gold
-$routes->post('/achat-gold', 'AbonnementController::acheterGold');
+// Objectifs
+$routes->get('/objectif', 'ObjectifController::index');
+$routes->post('/objectif/choose', 'ObjectifController::choose');
 
-// --- BACK OFFICE (FONCTIONNALITÉS ADMIN) ---
+// Abonnements (Gold)
+$routes->post('/subscription/gold', 'AbonnementController::acheterGold');
+$routes->get('/subscription/status', 'AbonnementController::status');
 
-// CRUD Régimes
-$routes->get('/regime', 'RegimeController::index', ['filter' => 'admin']);
-$routes->get('/regime/create', 'RegimeController::create', ['filter' => 'admin']);
-$routes->post('/regime/store', 'RegimeController::store', ['filter' => 'admin']);
-$routes->get('/regime/edit/(:num)', 'RegimeController::edit/$1', ['filter' => 'admin']);
-$routes->post('/regime/update/(:num)', 'RegimeController::update/$1', ['filter' => 'admin']);
-$routes->post('/regime/delete/(:num)', 'RegimeController::delete/$1', ['filter' => 'admin']);
-
-// CRUD Régime Sports (Gestion des activités par régime)
-$routes->get('/regime-sport/(:num)', 'RegimeSportController::index/$1', ['filter' => 'admin']);
-$routes->get('/regime-sport/create/(:num)', 'RegimeSportController::create/$1', ['filter' => 'admin']);
-$routes->post('/regime-sport/store/(:num)', 'RegimeSportController::store/$1', ['filter' => 'admin']);
-$routes->get('/regime-sport/edit/(:num)/(:num)', 'RegimeSportController::edit/$1/$2', ['filter' => 'admin']);
-$routes->post('/regime-sport/update/(:num)/(:num)', 'RegimeSportController::update/$1/$2', ['filter' => 'admin']);
-$routes->get('/regime-sport/delete/(:num)/(:num)', 'RegimeSportController::delete/$1/$2', ['filter' => 'admin']);
-
-// CRUD Activités sportives
-$routes->get('/activity', 'ActivityController::index', ['filter' => 'admin']);
-$routes->get('/activity/create', 'ActivityController::create', ['filter' => 'admin']);
-$routes->post('/activity/store', 'ActivityController::store', ['filter' => 'admin']);
-$routes->get('/activity/edit/(:num)', 'ActivityController::edit/$1', ['filter' => 'admin']);
-$routes->post('/activity/update/(:num)', 'ActivityController::update/$1', ['filter' => 'admin']);
-$routes->post('/activity/delete/(:num)', 'ActivityController::delete/$1', ['filter' => 'admin']);
-
-// CRUD Aliments (Composants des régimes)
-$routes->get('/aliment', 'AlimentController::index', ['filter' => 'admin']);
-$routes->get('/aliment/create', 'AlimentController::create', ['filter' => 'admin']);
-$routes->post('/aliment/store', 'AlimentController::store', ['filter' => 'admin']);
-$routes->get('/aliment/edit/(:num)', 'AlimentController::edit/$1', ['filter' => 'admin']);
-$routes->post('/aliment/update/(:num)', 'AlimentController::update/$1', ['filter' => 'admin']);
-$routes->post('/aliment/delete/(:num)', 'AlimentController::delete/$1', ['filter' => 'admin']);
-
-// Validation des codes par l'Admin
-$routes->get('/admin/wallet', 'AdminWalletController::index', ['filter' => 'admin']);
-$routes->get('/admin/wallet/approve/(:num)', 'AdminWalletController::approve/$1', ['filter' => 'admin']);
-$routes->get('/admin/wallet/reject/(:num)', 'AdminWalletController::reject/$1', ['filter' => 'admin']);
-$routes->get('/admin/wallet/mark-used/(:num)', 'AdminWalletController::markUsed/$1', ['filter' => 'admin']);
+// ============================================================================
+// --- BACK OFFICE (ADMIN) ---
+// ============================================================================
 
 // Dashboard Admin
-$routes->get('/admin/dashboard', 'AdminDashboardController::index', ['filter' => 'admin']);
-$routes->get('/admin', 'AdminDashboardController::index', ['filter' => 'admin']);
+$routes->get('/admin', 'AdminDashboardController::index');
+$routes->get('/admin/dashboard', 'AdminDashboardController::index');
 
-// Paramètres Généraux
-$routes->get('/parameter', 'ParameterController::index', ['filter' => 'admin']);
-$routes->get('/parameter/create', 'ParameterController::create', ['filter' => 'admin']);
-$routes->post('/parameter/store', 'ParameterController::store', ['filter' => 'admin']);
-$routes->get('/parameter/edit/(:num)', 'ParameterController::edit/$1', ['filter' => 'admin']);
-$routes->post('/parameter/update/(:num)', 'ParameterController::update/$1', ['filter' => 'admin']);
-$routes->get('/parameter/delete/(:num)', 'ParameterController::delete/$1', ['filter' => 'admin']);
+// CRUD Régimes
+$routes->group('admin/regime', static function ($routes) {
+    $routes->get('', 'RegimeController::index');
+    $routes->get('create', 'RegimeController::create');
+    $routes->post('store', 'RegimeController::store');
+    $routes->get('edit/(:num)', 'RegimeController::edit/$1');
+    $routes->post('update/(:num)', 'RegimeController::update/$1');
+    $routes->post('delete/(:num)', 'RegimeController::delete/$1');
+});
+
+// CRUD Régime Aliments (Composition)
+$routes->group('admin/regime-aliment', static function ($routes) {
+    $routes->get('(:num)', 'RegimeAlimentController::index/$1');
+    $routes->get('create/(:num)', 'RegimeAlimentController::create/$1');
+    $routes->post('store/(:num)', 'RegimeAlimentController::store/$1');
+    $routes->get('edit/(:num)/(:num)', 'RegimeAlimentController::edit/$1/$2');
+    $routes->post('update/(:num)/(:num)', 'RegimeAlimentController::update/$1/$2');
+    $routes->get('delete/(:num)/(:num)', 'RegimeAlimentController::delete/$1/$2');
+});
+
+// CRUD Régime Sports
+$routes->group('admin/regime-sport', static function ($routes) {
+    $routes->get('(:num)', 'RegimeSportController::index/$1');
+    $routes->get('create/(:num)', 'RegimeSportController::create/$1');
+    $routes->post('store/(:num)', 'RegimeSportController::store/$1');
+    $routes->get('edit/(:num)/(:num)', 'RegimeSportController::edit/$1/$2');
+    $routes->post('update/(:num)/(:num)', 'RegimeSportController::update/$1/$2');
+    $routes->get('delete/(:num)/(:num)', 'RegimeSportController::delete/$1/$2');
+});
+
+// CRUD Aliments
+$routes->group('admin/aliment', static function ($routes) {
+    $routes->get('', 'AlimentController::index');
+    $routes->get('create', 'AlimentController::create');
+    $routes->post('store', 'AlimentController::store');
+    $routes->get('edit/(:num)', 'AlimentController::edit/$1');
+    $routes->post('update/(:num)', 'AlimentController::update/$1');
+    $routes->post('delete/(:num)', 'AlimentController::delete/$1');
+});
+
+// CRUD Activités
+$routes->group('admin/activity', static function ($routes) {
+    $routes->get('', 'ActivityController::index');
+    $routes->get('create', 'ActivityController::create');
+    $routes->post('store', 'ActivityController::store');
+    $routes->get('edit/(:num)', 'ActivityController::edit/$1');
+    $routes->post('update/(:num)', 'ActivityController::update/$1');
+    $routes->post('delete/(:num)', 'ActivityController::delete/$1');
+});
+
+// CRUD Paramètres
+$routes->group('admin/parameter', static function ($routes) {
+    $routes->get('', 'ParameterController::index');
+    $routes->get('create', 'ParameterController::create');
+    $routes->post('store', 'ParameterController::store');
+    $routes->get('edit/(:num)', 'ParameterController::edit/$1');
+    $routes->post('update/(:num)', 'ParameterController::update/$1');
+    $routes->get('delete/(:num)', 'ParameterController::delete/$1');
+});
+
+// Gestion Portefeuille & Codes
+$routes->group('admin/wallet', static function ($routes) {
+    $routes->get('', 'AdminWalletController::index');
+    $routes->get('approve/(:num)', 'AdminWalletController::approve/$1');
+    $routes->get('reject/(:num)', 'AdminWalletController::reject/$1');
+    $routes->get('mark-used/(:num)', 'AdminWalletController::markUsed/$1');
+});
+
+// ============================================================================
+// --- ROUTES PAR DÉFAUT ---
+// ============================================================================
+
+// Catch-all pour 404
+$routes->setAutoRoute(true);

@@ -38,20 +38,38 @@ INSERT IGNORE INTO sport (nom, variation_poids, duree, description) VALUES
 ('Musculation', 6.00, 60, 'Entraînement avec poids');
 
 -- Régimes
-INSERT IGNORE INTO regime (nom, duree, variation_poids, prix, description) VALUES
-('Régime Faible Calorie', 7, -5.00, 7000.00, 'Perdre 5kg en 1 semaine'),
-('Régime Équilibré', 14, -3.50, 12600.00, 'Perdre 3.5kg en 2 semaines'),
-('Régime Perte Rapide', 10, -7.00, 8000.00, 'Perdre 7kg en 10 jours'),
-('Régime Gain Musculaire', 21, 4.50, 18900.00, 'Gagner 4.5kg en 3 semaines'),
-('Régime Maintenance', 30, 0.50, 24000.00, 'Maintenir le poids idéal');
+INSERT IGNORE INTO regime (nom, duree, variation_poids, prix_base, prix, prix_gold, description) VALUES
+('Régime Faible Calorie', 7, -5.00, 1000.00, 7000.00, 5950.00, 'Perdre 5kg en 1 semaine'),
+('Régime Équilibré', 14, -3.50, 900.00, 12600.00, 10710.00, 'Perdre 3.5kg en 2 semaines'),
+('Régime Perte Rapide', 10, -7.00, 800.00, 8000.00, 6800.00, 'Perdre 7kg en 10 jours'),
+('Régime Gain Musculaire', 21, 4.50, 900.00, 18900.00, 16065.00, 'Gagner 4.5kg en 3 semaines'),
+('Régime Maintenance', 30, 0.50, 800.00, 24000.00, 20400.00, 'Maintenir le poids idéal');
 
--- Régimes - Aliments
-INSERT IGNORE INTO regime_aliment (regime_id, aliment_id, pourcentage) VALUES
-(1, 1, 30), (1, 3, 25), (1, 4, 20), (1, 5, 15), (1, 6, 10),
-(2, 1, 25), (2, 2, 20), (2, 3, 25), (2, 4, 20), (2, 6, 10),
-(3, 3, 40), (3, 4, 30), (3, 6, 20), (3, 1, 10),
-(4, 2, 35), (4, 1, 30), (4, 6, 25), (4, 5, 10),
-(5, 1, 20), (5, 2, 20), (5, 3, 20), (5, 4, 20), (5, 6, 20);
+-- Régimes - Aliments (avec composition viande/poisson/volaille)
+INSERT IGNORE INTO regime_aliment (regime_id, aliment_id, pourcentage, pourcentage_viande, pourcentage_poisson, pourcentage_volaille) VALUES
+(1, 1, 100, 20, 30, 50),
+(1, 3, 100, 10, 70, 20),
+(1, 4, 100, 5, 80, 15),
+(1, 5, 100, 60, 20, 20),
+(1, 6, 100, 15, 25, 60),
+(2, 1, 100, 25, 25, 50),
+(2, 2, 100, 70, 20, 10),
+(2, 3, 100, 15, 70, 15),
+(2, 4, 100, 10, 75, 15),
+(2, 6, 100, 20, 30, 50),
+(3, 3, 100, 10, 80, 10),
+(3, 4, 100, 5, 85, 10),
+(3, 6, 100, 20, 30, 50),
+(3, 1, 100, 40, 20, 40),
+(4, 2, 100, 80, 10, 10),
+(4, 1, 100, 30, 25, 45),
+(4, 6, 100, 25, 35, 40),
+(4, 5, 100, 75, 15, 10),
+(5, 1, 100, 25, 25, 50),
+(5, 2, 100, 60, 20, 20),
+(5, 3, 100, 15, 70, 15),
+(5, 4, 100, 10, 75, 15),
+(5, 6, 100, 25, 30, 45);
 
 -- Régimes - Sports
 INSERT IGNORE INTO regime_sport (regime_id, sport_id, frequence_semaine, duree_minutes, intensite) VALUES
