@@ -61,8 +61,8 @@ class AbonnementController extends BaseController
         $transactionModel->insert([
             'wallet_id' => $wallet['id'],
             'montant' => $gold['prix'],
-            'type_transaction' => 'achat',
-            'date_transaction' => date('Y-m-d H:i:s'),
+            'type' => 'achat',
+            'user_id' => $userID
         ]);
         $abonnementUserModel->insert([
             'user_id' => $userID,

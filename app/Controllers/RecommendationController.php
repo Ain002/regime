@@ -138,6 +138,69 @@ class RecommendationController extends BaseController
         ]);
     }
 
+    public function buy($regimeId)
+    {
+        $user = session()->get('user');
+        if (!$user && session()->get('user_id')) {
+            $user = (new UserModel())->find(session()->get('user_id'));
+            session()->set('user', $user);
+        }
+
+        if (!$user) {
+            return redirect()->to('/login');
+        }
+
+        $regimeModel = new RegimeModel();
+        $regime = $regimeModel->find($regimeId);
+        if (!$regime) {
+            return redirect()->to('/recommendation')->with('error', 'Régime introuvable.');
+        }
+
+        $walletModel = new WalletModel();
+        $wallet = $walletModel->where('user_id', $user['id'])->first();
+        if (!$wallet) {
+            return redirect()->to('/recommendation')->with('error', 'Portefeuille introuvable.');
+        }
+
+        // Vérifier le solde
+        $prix = $regime['prix'];
+        $aboModel = new AbonnementUserModel();
+        if ($aboModel->isUserGold($user['id'])) {
+            $prix = $prix * 0.85;
+        }
+
+        if ($wallet['solde'] < $prix) {
+            return redirect()->to('/recommendation')->with('error', 'Solde insuffisant. Veuillez recharger votre portefeuille.');
+        }
+
+        // Effectuer l'achat
+        $walletModel->update($wallet['id'], [
+            'solde' => $wallet['solde'] - $prix
+        ]);
+
+        // Créer un enregistrement d'achat
+        $achatRegimeModel = new \App\Models\AchatRegimeModel();
+        $achatRegimeModel->insert([
+            'user_id' => $user['id'],
+            'regime_id' => $regimeId,
+            'montant_paye' => $prix,
+            'date_achat' => date('Y-m-d H:i:s'),
+            'statut' => 'active',
+            'date_expiration' => date('Y-m-d', strtotime('+30 days'))
+        ]);
+
+        // Créer une transaction
+        $transactionModel = new \App\Models\WalletTransactionModel();
+        $transactionModel->insert([
+            'wallet_id' => $wallet['id'],
+            'montant' => $prix,
+            'type' => 'achat',
+            'user_id' => $user['id']
+        ]);
+
+        return redirect()->to('/recommendation')->with('success', 'Régime acheté avec succès !');
+    }
+
     private function getEtatPhysique($imc)
     {
         if ($imc < 18.5) return 'Sous-poids';

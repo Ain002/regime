@@ -18,7 +18,7 @@ class ObjectifUserModel extends Model
     
     public function getLatestObjectifByUserId($userId)
     {
-        return $this->select('o.description')
+        return $this->select('o.description, ou.date_choix')
                     ->from('objectif_user ou') 
                     ->join('objectif o', 'o.id = ou.objectif_id')
                     ->where('ou.user_id', $userId)

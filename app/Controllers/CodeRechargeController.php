@@ -4,85 +4,43 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\WalletModel;
-use App\Models\CodeRechargeModel;
+use App\Models\WalletCodeModel;
 use App\Models\WalletTransactionModel;
-
+use App\Models\UserModel;
 
 class CodeRechargeController extends BaseController
 {
     public function saisieCode()
     {
-        $walletModel = new WalletModel();
-        $codeRechargeModel = new CodeRechargeModel();
-        $walletTransactionModel = new WalletTransactionModel();
-        $code = $this->request->getGet('code');
-        $userID = session()->get('user_id');
-
-        if (!$userID) {
-            return redirect()->to('/login')->with('error', 'Vous devez être connecté.');
-        }
-        if (!$code) {
-            return redirect()->back()->with('error', 'Veuillez entrer un code.');
+        $user = session()->get('user');
+        if (!$user && session()->get('user_id')) {
+            $user = (new UserModel())->find(session()->get('user_id'));
+            session()->set('user', $user);
         }
 
-        $wallet = $walletModel->where('user_id', $userID)->first();
-        if (!$wallet) {
-            $walletModel->insert(['user_id' => $userID, 'solde' => 0]);
-            $wallet = $walletModel->where('user_id', $userID)->first();
+        if (!$user) {
+            return redirect()->to('/login');
         }
 
-        $codeData = $codeRechargeModel->where('code', $code)->first();
-        if (!$codeData) {
-            return redirect()->back()->with('error', 'Code invalide.');
-        }
-
-        if ($codeData['used_by'] != null && $codeData['used_at'] != null)
-        {
-            return redirect()
-                ->back()
-                ->with(
-                    'error',
-                    'Code déjà utilisé'
-                );
-        }
-        $walletModel->update(
-            $wallet['id'],
-            [
-                'solde' =>
-                $wallet['solde'] + $codeData['montant']
-            ]
-        );
-        $codeRechargeModel->update($codeData['id'], [
-            'used' => 1,
-            'used_by' => $userID,
-            'used_at' => date('Y-m-d H:i:s'),
+        return view('code/index', [
+            'user' => $user,
         ]);
-
-        $walletTransactionModel->insert([
-            'wallet_id' => $wallet['id'],
-            'montant' => $codeData['montant'],
-            'type_transaction' => 'recharge',
-            'date_transaction' => date('Y-m-d H:i:s'),
-        ]);
-
-        return redirect()->back()->with('success', 'Votre porte-monnaie a été rechargé.');
-
     }
 
     public function validateCode()
     {
         $walletModel = new WalletModel();
-        $codeRechargeModel = new CodeRechargeModel();
+        $walletCodeModel = new WalletCodeModel();
         $walletTransactionModel = new WalletTransactionModel();
 
-        $code = $this->request->getPost('code');
+        $code = strtoupper(trim((string) $this->request->getPost('code')));
         $userID = session()->get('user_id');
 
         if (!$userID) {
             return redirect()->to('/login')->with('error', 'Vous devez être connecté.');
         }
 
-        if (!$code) {
+        if ($code === '') {
             return redirect()->back()->with('error', 'Veuillez entrer un code.');
         }
 
@@ -92,30 +50,35 @@ class CodeRechargeController extends BaseController
             $wallet = $walletModel->where('user_id', $userID)->first();
         }
 
-        $codeData = $codeRechargeModel->where('code', $code)->first();
+        $codeData = $walletCodeModel
+            ->where('code', $code)
+            ->where('status', 'available')
+            ->first();
+
         if (!$codeData) {
-            return redirect()->back()->with('error', 'Code invalide.');
+            return redirect()->back()->with('error', 'Code invalide ou déjà utilisé.');
         }
 
-        if ($codeData['used'] == 1) {
-            return redirect()->back()->with('error', 'Code déjà utilisé.');
+        $montant = (float) ($codeData['value'] ?? 0);
+        if ($montant <= 0) {
+            return redirect()->back()->with('error', 'Montant du code invalide.');
         }
 
         $walletModel->update($wallet['id'], [
-            'solde' => $wallet['solde'] + $codeData['montant']
+            'solde' => ((float) $wallet['solde']) + $montant,
         ]);
 
-        $codeRechargeModel->update($codeData['id'], [
-            'used' => 1,
-            'used_by' => $userID,
-            'used_at' => date('Y-m-d H:i:s'),
+        $walletCodeModel->update($codeData['id'], [
+            'status' => 'used',
+            'user_id' => $userID,
+            'approved_at' => date('Y-m-d H:i:s'),
         ]);
 
         $walletTransactionModel->insert([
             'wallet_id' => $wallet['id'],
-            'montant' => $codeData['montant'],
-            'type_transaction' => 'recharge',
-            'date_transaction' => date('Y-m-d H:i:s'),
+            'montant' => $montant,
+            'type' => 'recharge',
+            'user_id' => $userID,
         ]);
 
         return redirect()->to('/recommendation')->with('success', 'Votre porte-monnaie a été rechargé avec succès !');
