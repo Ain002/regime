@@ -1,13 +1,13 @@
 <h2>Modifier paramètre</h2>
 
 <?php if (session()->has('success')): ?>
-    <div style="color: green;">
+    <div class="alert alert-success">
         <?= session('success') ?>
     </div>
 <?php endif; ?>
 
 <?php if (session()->has('errors')): ?>
-    <div style="color: red;">
+    <div class="alert alert-danger">
         <ul>
             <?php foreach (session('errors') as $error): ?>
                 <li><?= esc($error) ?></li>
@@ -16,25 +16,26 @@
     </div>
 <?php endif; ?>
 
-<form method="post" action="/parameter/update/<?= $parameter['id'] ?>">
+<form method="post" action="/parameter/update/<?= $parameter['id'] ?>" class="form">
     <?= csrf_field() ?>
 
-    <div>
-        <label>Clé</label>
-        <input type="text" value="<?= esc($parameter['key']) ?>" disabled>
+    <div class="mb-3">
+        <label class="form-label">Clé</label>
+        <input type="text" class="form-control" value="<?= esc($parameter['key']) ?>" disabled>
     </div>
 
-    <div>
-        <label>Valeur</label>
-        <textarea name="value" required><?= esc($parameter['value']) ?></textarea>
+    <div class="mb-3">
+        <label for="value" class="form-label">Valeur</label>
+        <textarea id="value" name="value" class="form-control" required><?= esc($parameter['value']) ?></textarea>
     </div>
 
-    <div>
-        <label>Description</label>
-        <textarea name="description"><?= esc($parameter['description']) ?></textarea>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" name="description" class="form-control"><?= esc($parameter['description']) ?></textarea>
     </div>
 
-    <button type="submit">Modifier</button>
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">✅ Modifier</button>
+        <a href="/parameter" class="btn btn-secondary">❌ Annuler</a>
+    </div>
 </form>
-
-<a href="/parameter">Retour</a>

@@ -1,117 +1,204 @@
 ========================================
-COMMANDES SQL À EXÉCUTER
+SQL À EXÉCUTER
 ========================================
 
-Exécutez ces requêtes dans votre base de données :
+Ce script est aligné avec les modèles et contrôleurs présents dans le dépôt.
 
--- ========== TABLE ALIMENTS ==========
-CREATE TABLE IF NOT EXISTS `aliments` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `nom` VARCHAR(255) NOT NULL,
-  `type` VARCHAR(50) DEFAULT NULL COMMENT 'viande, poisson, volaille, etc.',
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  INDEX `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS regime CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE regime;
 
--- ========== TABLE REGIME_ALIMENT (pivot) ==========
-CREATE TABLE IF NOT EXISTS `regime_aliment` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `regime_id` INT NOT NULL,
-  `aliment_id` INT NOT NULL,
-  `percentage` DECIMAL(5,2) NOT NULL DEFAULT 0,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (`regime_id`) REFERENCES `regime`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`aliment_id`) REFERENCES `aliments`(`id`) ON DELETE CASCADE,
-  UNIQUE KEY `unique_regime_aliment` (`regime_id`, `aliment_id`),
-  INDEX `aliment_id` (`aliment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS abonnement (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  libelle VARCHAR(100) NOT NULL,
+  prix DECIMAL(12,2) NOT NULL,
+  reduction DECIMAL(5,2) NOT NULL DEFAULT 0
+);
 
--- ========== TABLE ACTIVITIES ==========
-CREATE TABLE IF NOT EXISTS `activities` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `nom` VARCHAR(255) NOT NULL,
-  `met` DECIMAL(6,2) DEFAULT NULL COMMENT 'Metabolic Equivalent of Task',
-  `description` TEXT,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS type_user (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(50) NOT NULL UNIQUE
+);
 
--- ========== TABLE WALLET_CODES ==========
-CREATE TABLE IF NOT EXISTS `wallet_codes` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `code` VARCHAR(100) NOT NULL UNIQUE,
-  `value` DECIMAL(10,2) NOT NULL COMMENT 'Montant en Ar',
-  `status` VARCHAR(50) DEFAULT 'available' COMMENT 'available, pending, approved, rejected, used',
-  `user_id` INT DEFAULT NULL,
-  `requested_at` DATETIME DEFAULT NULL,
-  `approved_at` DATETIME DEFAULT NULL,
-  `rejected_at` DATETIME DEFAULT NULL,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  INDEX `code` (`code`),
-  INDEX `status` (`status`),
-  INDEX `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT IGNORE INTO type_user (id, code) VALUES
+(1, 'user'),
+(2, 'admin');
 
--- ========== TABLE PARAMETERS ==========
-CREATE TABLE IF NOT EXISTS `parameters` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS users (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(255) NOT NULL,
+  prenom VARCHAR(255) NOT NULL,
+  date_naissance DATE NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  genre ENUM('H', 'F') NOT NULL,
+  taille DECIMAL(8,2) NOT NULL,
+  poids DECIMAL(8,2) NOT NULL,
+  type_user_id INT UNSIGNED NOT NULL DEFAULT 1,
+  abonnement_id INT UNSIGNED NULL,
+  CONSTRAINT fk_user_type_user FOREIGN KEY (type_user_id) REFERENCES type_user(id),
+  CONSTRAINT fk_user_abonnement FOREIGN KEY (abonnement_id) REFERENCES abonnement(id)
+);
+
+CREATE TABLE IF NOT EXISTS abonnement_user (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  abonnement_id INT UNSIGNED NOT NULL,
+  date_achat DATETIME DEFAULT CURRENT_TIMESTAMP,
+  date_expiration DATETIME NULL,
+  CONSTRAINT fk_abonnement_user_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_abonnement_user_abonnement FOREIGN KEY (abonnement_id) REFERENCES abonnement(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_abonnement_user (user_id, abonnement_id, date_achat)
+);
+
+CREATE TABLE IF NOT EXISTS wallet (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  solde DECIMAL(12,2) NOT NULL DEFAULT 0,
+  CONSTRAINT fk_wallet_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_wallet_user (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS wallet_transactions (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  wallet_id INT UNSIGNED NOT NULL,
+  montant DECIMAL(12,2) NOT NULL,
+  type_transaction ENUM('recharge', 'achat') NOT NULL,
+  date_transaction DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_transaction_wallet FOREIGN KEY (wallet_id) REFERENCES wallet(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS code_recharge (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(255) NOT NULL UNIQUE,
+  montant DECIMAL(12,2) NOT NULL,
+  used TINYINT(1) NOT NULL DEFAULT 0,
+  used_by INT UNSIGNED NULL,
+  used_at DATETIME NULL,
+  CONSTRAINT fk_code_user FOREIGN KEY (used_by) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS wallet_codes (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(100) NOT NULL UNIQUE,
+  value DECIMAL(12,2) NOT NULL,
+  status ENUM('available', 'pending', 'approved', 'rejected', 'used') NOT NULL DEFAULT 'available',
+  user_id INT UNSIGNED NULL,
+  requested_at DATETIME NULL,
+  approved_at DATETIME NULL,
+  rejected_at DATETIME NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_wallet_codes_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX idx_wallet_codes_status (status),
+  INDEX idx_wallet_codes_user_id (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS objectif (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  description VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS objectif_user (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  objectif_id INT UNSIGNED NOT NULL,
+  date_choix DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_objectif_user_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_objectif_user_objectif FOREIGN KEY (objectif_id) REFERENCES objectif(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS aliment (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(255) NOT NULL,
+  description TEXT,
+  image VARCHAR(255),
+  type_aliment ENUM('viande', 'poisson', 'volaille', 'legume', 'fruit', 'autre') NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS regime (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(255) NOT NULL,
+  duree INT NOT NULL,
+  variation_poids DECIMAL(8,2) NOT NULL,
+  prix DECIMAL(12,2) NOT NULL,
+  description TEXT NULL
+);
+
+CREATE TABLE IF NOT EXISTS regime_aliment (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  regime_id INT UNSIGNED NOT NULL,
+  aliment_id INT UNSIGNED NOT NULL,
+  pourcentage DECIMAL(5,2) NOT NULL DEFAULT 0,
+  CONSTRAINT fk_regime_aliment_regime FOREIGN KEY (regime_id) REFERENCES regime(id) ON DELETE CASCADE,
+  CONSTRAINT fk_regime_aliment_aliment FOREIGN KEY (aliment_id) REFERENCES aliment(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_regime_aliment (regime_id, aliment_id)
+);
+
+CREATE TABLE IF NOT EXISTS sport (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(255) NOT NULL,
+  variation_poids DECIMAL(8,2) NOT NULL,
+  duree INT NOT NULL,
+  description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS regime_sport (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  regime_id INT UNSIGNED NOT NULL,
+  sport_id INT UNSIGNED NOT NULL,
+  frequence_semaine INT NOT NULL,
+  duree_minutes INT NOT NULL,
+  intensite VARCHAR(50) NOT NULL,
+  CONSTRAINT fk_regime_sport_regime FOREIGN KEY (regime_id) REFERENCES regime(id) ON DELETE CASCADE,
+  CONSTRAINT fk_regime_sport_sport FOREIGN KEY (sport_id) REFERENCES sport(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_regime_sport (regime_id, sport_id)
+);
+
+CREATE TABLE IF NOT EXISTS achat_regime (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  regime_id INT UNSIGNED NOT NULL,
+  prix_paye DECIMAL(12,2) NOT NULL,
+  date_achat DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_achat_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_achat_regime FOREIGN KEY (regime_id) REFERENCES regime(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS parameters (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `key` VARCHAR(100) NOT NULL UNIQUE,
-  `value` TEXT,
-  `description` VARCHAR(255),
-  INDEX `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  value TEXT,
+  description VARCHAR(255)
+);
 
--- ========== DONNÉES D'EXEMPLE ==========
+INSERT IGNORE INTO abonnement (id, libelle, prix, reduction) VALUES
+(1, 'Standard', 0.00, 0.00),
+(2, 'Gold', 0.00, 0.00);
 
--- Exemples d'aliments
-INSERT INTO `aliments` (`nom`, `type`) VALUES
-('Poulet', 'volaille'),
-('Boeuf', 'viande'),
-('Poisson blanc', 'poisson'),
-('Saumon', 'poisson'),
-('Jambon', 'viande'),
-('Dinde', 'volaille')
-ON DUPLICATE KEY UPDATE `nom`=VALUES(`nom`);
+INSERT IGNORE INTO aliment (nom, description, image, type_aliment) VALUES
+('Poulet', NULL, NULL, 'volaille'),
+('Boeuf', NULL, NULL, 'viande'),
+('Poisson blanc', NULL, NULL, 'poisson'),
+('Saumon', NULL, NULL, 'poisson'),
+('Jambon', NULL, NULL, 'viande'),
+('Dinde', NULL, NULL, 'volaille');
 
--- Exemples d'activités
-INSERT INTO `activities` (`nom`, `met`, `description`) VALUES
-('Marche rapide', 3.5, 'Marche à 5.5 km/h'),
-('Course', 8.0, 'Course à 9.7 km/h'),
-('Vélo', 6.0, 'Vélo à intensité modérée'),
-('Natation', 7.0, 'Natation modérée'),
-('Musculation', 6.0, 'Entraînement avec poids')
-ON DUPLICATE KEY UPDATE `nom`=VALUES(`nom`);
+INSERT IGNORE INTO sport (nom, variation_poids, duree, description) VALUES
+('Marche rapide', 3.50, 30, 'Marche à 5.5 km/h'),
+('Course', 8.00, 30, 'Course à 9.7 km/h'),
+('Vélo', 6.00, 45, 'Vélo à intensité modérée'),
+('Natation', 7.00, 45, 'Natation modérée'),
+('Musculation', 6.00, 60, 'Entraînement avec poids');
 
--- Exemples de codes porte-monnaie
-INSERT INTO `wallet_codes` (`code`, `value`, `status`) VALUES
-('CODE2024-001', 10000, 'available'),
-('CODE2024-002', 20000, 'available'),
-('CODE2024-003', 50000, 'available')
-ON DUPLICATE KEY UPDATE `value`=VALUES(`value`);
+INSERT IGNORE INTO wallet_codes (code, value, status) VALUES
+('CODE2024-001', 10000.00, 'available'),
+('CODE2024-002', 20000.00, 'available'),
+('CODE2024-003', 50000.00, 'available');
 
--- Exemples de paramètres
-INSERT INTO `parameters` (`key`, `value`, `description`) VALUES
+INSERT IGNORE INTO parameters (`key`, value, description) VALUES
 ('prix_base_regime_court', '1000', 'Prix par jour pour régime <= 7 jours'),
 ('prix_base_regime_moyen', '900', 'Prix par jour pour régime 8-30 jours'),
 ('prix_base_regime_long', '800', 'Prix par jour pour régime > 30 jours'),
-('devise', 'Ar', 'Devise locale')
-ON DUPLICATE KEY UPDATE `value`=VALUES(`value`);
+('devise', 'Ar', 'Devise locale');
 
--- Si la colonne description n'existe pas dans votre table regime, ajoutez-la :
-ALTER TABLE `regime` ADD COLUMN `description` TEXT DEFAULT NULL AFTER `prix`;
-
-========================================
-NOTES :
-========================================
-
-1. La table `regime` doit exister (déjà créée selon vos fichiers).
-2. Les clés étrangères utilisent CASCADE DELETE, donc supprimer un régime supprime automatiquement ses aliments associés.
-3. Les exemples de données sont optionnels — vous pouvez les ignorer et ajouter vos propres données.
-4. La statut 'available' = code pas encore demandé par un user.
-5. La statut 'pending' = user a demandé, en attente approbation admin.
-6. La statut 'approved' = approuvé par admin, peut être utilisé.
-7. La statut 'rejected' = rejeté par admin.
-8. La statut 'used' = code déjà utilisé.
+ALTER TABLE regime ADD COLUMN IF NOT EXISTS description TEXT NULL AFTER prix;

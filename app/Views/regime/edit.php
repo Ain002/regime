@@ -25,6 +25,11 @@
     </div>
 
     <div>
+        <label>Prix (Ar)</label>
+        <input type="number" step="0.01" min="0" name="prix" value="<?= $regime['prix'] ?>" required>
+    </div>
+
+    <div>
         <label>Description</label>
         <textarea name="description"><?= esc($regime['description']) ?></textarea>
     </div>

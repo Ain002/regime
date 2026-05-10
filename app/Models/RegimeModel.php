@@ -15,6 +15,8 @@ class RegimeModel extends Model
         'duree',
         'variation_poids',
         'prix',
+        'prix_base',
+        'prix_gold',
         'description'
     ];
 
@@ -80,6 +82,24 @@ class RegimeModel extends Model
             $regime['variation_poids'] + $variationSport;
 
         return $regime;
+    }
 
+    /**
+     * Calculate dynamic price based on duration and subscription
+     * @param float $basePrice - Base price for 1 week
+     * @param int $duration - Duration in weeks
+     * @param bool $goldOption - Whether user has Gold option
+     * @return array ['price' => float, 'price_gold' => float]
+     */
+    public static function calculatePrice($basePrice, $duration, $goldOption = false)
+    {
+        $price = $basePrice * $duration;
+        $priceGold = $price * 0.85; // 15% reduction with Gold
+
+        return [
+            'price' => round($price, 2),
+            'price_gold' => round($priceGold, 2),
+            'reduction' => round($price - $priceGold, 2)
+        ];
     }
 }

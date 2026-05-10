@@ -61,9 +61,9 @@ class AuthFunctions
     public function saveUserObjective($userId, $objectifCode)
     {
         $descriptionMap = [
-            'lose_weight' => 'Perdre de poids',
+            'lose_weight' => 'Réduire son poids',
             'ideal_bmi' => 'Atteindre son IMC idéal',
-            'gain_weight' => 'Gagner de poids',
+            'gain_weight' => 'Augmenter son poids',
         ];
 
         if (!isset($descriptionMap[$objectifCode])) {
