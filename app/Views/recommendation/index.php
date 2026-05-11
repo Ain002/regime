@@ -267,7 +267,7 @@
                                                         </small>
 
                                                         <strong>
-                                                            <?= $prog['variation_poids'] ?> kg
+                                                            <?= $prog['variation_totale'] ?> kg
                                                         </strong>
 
                                                     </div>

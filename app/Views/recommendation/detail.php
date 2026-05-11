@@ -40,7 +40,6 @@
                 </a>
             </li>
         </ul>
-    <!-- recommendation/detail.php -->
 
 <div class="container-fluid">
 
