@@ -66,7 +66,7 @@ class RegimeController extends BaseController{
             ]);
         }
 
-        return redirect()->to('/regime');
+        return redirect()->to('/admin/regime');
     }
 
     public function edit($id)
@@ -124,7 +124,7 @@ class RegimeController extends BaseController{
             ]);
         }
 
-        return redirect()->to('/regime');
+        return redirect()->to('/admin/regime');
     }
 
     public function delete($id)
@@ -133,7 +133,7 @@ class RegimeController extends BaseController{
 
         $model->delete($id);
 
-        return redirect()->to('/regime');
+        return redirect()->to('/admin/regime');
     }
 
 }

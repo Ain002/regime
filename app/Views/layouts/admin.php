@@ -50,6 +50,11 @@
                     <span>Aliments</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="<?= site_url('admin/abonnements') ?>">
+                    <i class="fas fa-fw fa-star"></i>
+                    <span>Abonnements</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="<?= site_url('admin/wallet') ?>">
                     <i class="fas fa-fw fa-wallet"></i>
                     <span>Codes Recharge</span></a>

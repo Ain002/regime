@@ -128,6 +128,13 @@ $routes->group('admin/parameter', static function ($routes) {
     $routes->get('delete/(:num)', 'ParameterController::delete/$1');
 });
 
+// CRUD Abonnements
+$routes->group('admin/abonnements', static function ($routes) {
+    $routes->get('', 'Admin\AbonnementController::index');
+    $routes->get('(:num)/edit', 'Admin\AbonnementController::edit/$1');
+    $routes->post('(:num)/update', 'Admin\AbonnementController::update/$1');
+});
+
 // Gestion Portefeuille & Codes
 $routes->group('admin/wallet', static function ($routes) {
     $routes->get('', 'AdminWalletController::index');

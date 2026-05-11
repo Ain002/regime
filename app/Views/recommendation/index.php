@@ -190,21 +190,37 @@
                                     <h6 class="m-0 font-weight-bold text-white">⭐ Devenir Gold (15% de réduction)</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p class="text-muted">Profitez de 15% de réduction sur tous les régimes!</p>
-                                    <div class="alert alert-info mb-3">
-                                        <i class="fas fa-star"></i> Avantages Gold:
-                                        <ul class="mb-0 mt-2">
-                                            <li>15% de réduction immédiate</li>
-                                            <li>Régimes premium</li>
-                                            <li>Support prioritaire</li>
-                                        </ul>
-                                    </div>
-                                    <form method="POST" action="/subscription/gold">
-                                        <?= csrf_field() ?>
-                                        <button type="submit" class="btn btn-warning btn-block btn-lg">
-                                            <i class="fas fa-crown"></i> Devenir Gold
-                                        </button>
-                                    </form>
+                                    <?php if ($isGold): ?>
+                                        <div class="alert alert-success mb-0">
+                                            <i class="fas fa-check-circle"></i> <strong>Vous êtes déjà Gold!</strong>
+                                            <p class="mb-0 mt-2">Vous profitez de 15% de réduction sur tous les régimes.</p>
+                                        </div>
+                                    <?php else: ?>
+                                        <p class="text-muted">Profitez de 15% de réduction sur tous les régimes!</p>
+                                        <div class="alert alert-info mb-3">
+                                            <i class="fas fa-star"></i> Avantages Gold:
+                                            <ul class="mb-0 mt-2">
+                                                <li>15% de réduction immédiate</li>
+                                                <li>Régimes premium</li>
+                                                <li>Support prioritaire</li>
+                                            </ul>
+                                        </div>
+                                        <div class="mb-3 p-3 bg-light rounded">
+                                            <h5 class="mb-2"><strong>Prix:</strong> <?= number_format($goldPrice, 0, ',', ' ') ?> Ar</h5>
+                                            <p class="mb-1 text-muted"><small>Solde actuel: <?= number_format($solde, 0, ',', ' ') ?> Ar</small></p>
+                                            <?php if ($solde < $goldPrice): ?>
+                                                <div class="alert alert-warning mb-0 py-2">
+                                                    <i class="fas fa-exclamation-triangle"></i> Solde insuffisant
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <form method="POST" action="/subscription/gold">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="btn btn-warning btn-block btn-lg" <?= $solde < $goldPrice ? 'disabled' : '' ?>>
+                                                <i class="fas fa-crown"></i> Devenir Gold
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

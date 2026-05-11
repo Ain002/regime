@@ -9,6 +9,9 @@ class AbonnementUserModel extends Model
     protected $table = 'abonnement_user';
 
     protected $primaryKey = 'id';
+    
+    protected $useTimestamps = false;
+    protected $protectFields = false;
 
     protected $allowedFields = [
         'user_id',

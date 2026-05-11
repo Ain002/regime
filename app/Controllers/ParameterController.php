@@ -41,7 +41,7 @@ class ParameterController extends BaseController
             'description' => $this->request->getPost('description')
         ]);
 
-        return redirect()->to('/parameter')->with('success', 'Paramètre créé avec succès.');
+        return redirect()->to('/admin/parameter')->with('success', 'Paramètre créé avec succès.');
     }
 
     // FORM EDIT
@@ -51,7 +51,7 @@ class ParameterController extends BaseController
         $data['parameter'] = $model->find($id);
 
         if (!$data['parameter']) {
-            return redirect()->to('/parameter')->with('error', 'Paramètre non trouvé.');
+            return redirect()->to('/admin/parameter')->with('error', 'Paramètre non trouvé.');
         }
 
         return view('parameter/edit', $data);
@@ -76,7 +76,7 @@ class ParameterController extends BaseController
             'description' => $this->request->getPost('description')
         ]);
 
-        return redirect()->to('/parameter')->with('success', 'Paramètre mis à jour.');
+        return redirect()->to('/admin/parameter')->with('success', 'Paramètre mis à jour.');
     }
 
     // DELETE
@@ -86,11 +86,11 @@ class ParameterController extends BaseController
         $param = $model->find($id);
 
         if (!$param) {
-            return redirect()->to('/parameter')->with('error', 'Paramètre non trouvé.');
+            return redirect()->to('/admin/parameter')->with('error', 'Paramètre non trouvé.');
         }
 
         $model->delete($id);
 
-        return redirect()->to('/parameter')->with('success', 'Paramètre supprimé.');
+        return redirect()->to('/admin/parameter')->with('success', 'Paramètre supprimé.');
     }
 }

@@ -43,7 +43,7 @@ class ActivityController extends BaseController
             'description' => $this->request->getPost('description')
         ]);
 
-        return redirect()->to('/activity');
+        return redirect()->to('/admin/activity');
     }
 
     // FORM EDIT
@@ -53,7 +53,7 @@ class ActivityController extends BaseController
         $data['activity'] = $model->find($id);
 
         if (!$data['activity']) {
-            return redirect()->to('/activity')->with('error', 'Activité non trouvée.');
+            return redirect()->to('/admin/activity')->with('error', 'Activité non trouvée.');
         }
 
         return view('activity/edit', $data);
@@ -82,7 +82,7 @@ class ActivityController extends BaseController
             'description' => $this->request->getPost('description')
         ]);
 
-        return redirect()->to('/activity');
+        return redirect()->to('/admin/activity');
     }
 
     // DELETE
@@ -90,6 +90,6 @@ class ActivityController extends BaseController
     {
         $model = new ActivityModel();
         $model->delete($id);
-        return redirect()->to('/activity');
+        return redirect()->to('/admin/activity');
     }
 }

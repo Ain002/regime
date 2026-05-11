@@ -41,7 +41,7 @@ class AlimentController extends BaseController
             'image' => $this->request->getPost('image'),
         ]);
 
-        return redirect()->to('/aliment')->with('success', 'Aliment ajouté.');
+        return redirect()->to('/admin/aliment')->with('success', 'Aliment ajouté.');
     }
 
     public function edit($id)
@@ -50,7 +50,7 @@ class AlimentController extends BaseController
         $data['aliment'] = $model->find($id);
 
         if (! $data['aliment']) {
-            return redirect()->to('/aliment')->with('error', 'Aliment non trouvé.');
+            return redirect()->to('/admin/aliment')->with('error', 'Aliment non trouvé.');
         }
 
         return view('aliment/edit', $data);
@@ -78,7 +78,7 @@ class AlimentController extends BaseController
             'image' => $this->request->getPost('image'),
         ]);
 
-        return redirect()->to('/aliment')->with('success', 'Aliment modifié.');
+        return redirect()->to('/admin/aliment')->with('success', 'Aliment modifié.');
     }
 
     public function delete($id)
@@ -86,6 +86,6 @@ class AlimentController extends BaseController
         $model = new AlimentModel();
         $model->delete($id);
 
-        return redirect()->to('/aliment')->with('success', 'Aliment supprimé.');
+        return redirect()->to('/admin/aliment')->with('success', 'Aliment supprimé.');
     }
 }

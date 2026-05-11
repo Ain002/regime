@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\RegimeModel;
 use App\Models\ObjectifUserModel;
 use App\Models\AbonnementUserModel;
+use App\Models\AbonnementModel;
 use App\Models\UserModel;
 use App\Models\WalletModel;
 
@@ -204,6 +205,11 @@ class RecommendationController extends BaseController
 
         $walletModel = new WalletModel();
         $solde = $walletModel->getSoldeByUserId($user['id']) ?? 0;
+        
+        // Récupérer le prix de l'abonnement Gold
+        $abonnementModel = new AbonnementModel();
+        $goldAbonnement = $abonnementModel->where('libelle', 'Gold')->first();
+        $goldPrice = $goldAbonnement ? (float)$goldAbonnement['prix'] : 0;
 
         $regimeModel = new RegimeModel();
 
@@ -244,6 +250,7 @@ class RecommendationController extends BaseController
             'objectif' => $objectifDescription,
             'solde' => $solde,
             'isGold' => $isGold,
+            'goldPrice' => $goldPrice,
             'programmes' => $programmes
         ]);
     }

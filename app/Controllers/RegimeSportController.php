@@ -16,7 +16,7 @@ class RegimeSportController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         $sports = $regimeSportModel->getSportsForRegime($regimeId);
@@ -35,7 +35,7 @@ class RegimeSportController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         // Get sports not yet assigned
@@ -58,7 +58,7 @@ class RegimeSportController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         if (!$this->validate([
@@ -78,7 +78,7 @@ class RegimeSportController extends BaseController
             'intensite' => $this->request->getPost('intensite')
         ]);
 
-        return redirect()->to("/regime-sport/$regimeId")->with('success', 'Sport ajouté au régime.');
+        return redirect()->to("/admin/regime-sport/$regimeId")->with('success', 'Sport ajouté au régime.');
     }
 
     // Edit sport assignment form
@@ -89,7 +89,7 @@ class RegimeSportController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         $regimeSport = $regimeSportModel
@@ -98,7 +98,7 @@ class RegimeSportController extends BaseController
             ->first();
 
         if (!$regimeSport) {
-            return redirect()->to("/regime-sport/$regimeId")->with('error', 'Assignation non trouvée.');
+            return redirect()->to("/admin/regime-sport/$regimeId")->with('error', 'Assignation non trouvée.');
         }
 
         return view('regime_sport/edit', [
@@ -115,7 +115,7 @@ class RegimeSportController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         if (!$this->validate([
@@ -136,7 +136,7 @@ class RegimeSportController extends BaseController
             ])
             ->update();
 
-        return redirect()->to("/regime-sport/$regimeId")->with('success', 'Sport mis à jour.');
+        return redirect()->to("/admin/regime-sport/$regimeId")->with('success', 'Sport mis à jour.');
     }
 
     // Delete sport from regime
@@ -147,7 +147,7 @@ class RegimeSportController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         $regimeSportModel
@@ -155,6 +155,6 @@ class RegimeSportController extends BaseController
             ->where('sport_id', $sportId)
             ->delete();
 
-        return redirect()->to("/regime-sport/$regimeId")->with('success', 'Sport supprimé du régime.');
+        return redirect()->to("/admin/regime-sport/$regimeId")->with('success', 'Sport supprimé du régime.');
     }
 }
