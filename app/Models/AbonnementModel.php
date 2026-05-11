@@ -10,5 +10,6 @@ class AbonnementModel extends Model
     protected $primaryKey = 'id';
     
     protected $allowedFields = ['libelle','reduction','prix'];
+    protected $protectFields = false;
 
 }

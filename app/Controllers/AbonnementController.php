@@ -29,10 +29,12 @@ class AbonnementController extends BaseController
             return redirect()->back()->with('error', 'Abonnement Gold introuvable.');
         }
         if (!$wallet) {
-            $walletModel->insert(['user_id' => $userID, 'solde' => 0]);
+            $walletModel->insert(array('user_id' => (int)$userID, 'solde' => 0));
             $wallet = $walletModel->where('user_id', $userID)->first();
         }
-        $dejaGold = $abonnementUserModel->where('user_id', $userID)->where('abonnement_id', $gold['id'])->first();
+        
+        $goldId = (int)$gold['id'];
+        $dejaGold = $abonnementUserModel->where('user_id', $userID)->where('abonnement_id', $goldId)->first();
         if($dejaGold)
         {
             return redirect()
@@ -53,20 +55,29 @@ class AbonnementController extends BaseController
         }
         $walletModel->update(
             $wallet['id'],
-            [
-                'solde' =>
-                $wallet['solde'] - $gold['prix']
-            ]
+            array(
+                'solde' => $wallet['solde'] - $gold['prix']
+            )
         );
-        $transactionModel->insert([
-            'wallet_id' => $wallet['id'],
-            'montant' => $gold['prix'],
+        
+        $walletId = (int)$wallet['id'];
+        $montant = $gold['prix'];
+        
+        // Utiliser le query builder directement pour éviter les problèmes de reindexation
+        $db = \Config\Database::connect();
+        
+        $db->table('wallet_transactions')->insert([
+            'wallet_id' => $walletId,
+            'montant' => $montant,
             'type' => 'achat',
-            'user_id' => $userID
+            'user_id' => (int)$userID,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
-        $abonnementUserModel->insert([
-            'user_id' => $userID,
-            'abonnement_id' => $gold['id']
+        
+        $db->table('abonnement_user')->insert([
+            'user_id' => (int)$userID,
+            'abonnement_id' => $goldId,
+            'date_achat' => date('Y-m-d H:i:s')
         ]);
         return redirect()
             ->back()

@@ -16,7 +16,7 @@ class RegimeAlimentController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         $aliments = $regimeAlimentModel
@@ -55,7 +55,7 @@ class RegimeAlimentController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         // Get foods not yet assigned
@@ -78,7 +78,7 @@ class RegimeAlimentController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         if (!$this->validate([
@@ -108,7 +108,7 @@ class RegimeAlimentController extends BaseController
             'pourcentage_volaille' => $volaille
         ]);
 
-        return redirect()->to("/regime-aliment/$regimeId")->with('success', 'Aliment ajouté au régime.');
+        return redirect()->to("/admin/regime-aliment/$regimeId")->with('success', 'Aliment ajouté au régime.');
     }
 
     // Edit food assignment form
@@ -119,7 +119,7 @@ class RegimeAlimentController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         $regimeAliment = $regimeAlimentModel
@@ -130,7 +130,7 @@ class RegimeAlimentController extends BaseController
             ->first();
 
         if (!$regimeAliment) {
-            return redirect()->to("/regime-aliment/$regimeId")->with('error', 'Aliment non trouvé.');
+            return redirect()->to("/admin/regime-aliment/$regimeId")->with('error', 'Aliment non trouvé.');
         }
 
         return view('regime_aliment/edit', [
@@ -147,7 +147,7 @@ class RegimeAlimentController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         if (!$this->validate([
@@ -178,7 +178,7 @@ class RegimeAlimentController extends BaseController
             ])
             ->update();
 
-        return redirect()->to("/regime-aliment/$regimeId")->with('success', 'Aliment mis à jour.');
+        return redirect()->to("/admin/regime-aliment/$regimeId")->with('success', 'Aliment mis à jour.');
     }
 
     // Delete food from regime
@@ -189,7 +189,7 @@ class RegimeAlimentController extends BaseController
 
         $regime = $regimeModel->find($regimeId);
         if (!$regime) {
-            return redirect()->to('/regime')->with('error', 'Régime non trouvé.');
+            return redirect()->to('/admin/regime')->with('error', 'Régime non trouvé.');
         }
 
         $regimeAlimentModel
@@ -197,6 +197,6 @@ class RegimeAlimentController extends BaseController
             ->where('aliment_id', $alimentId)
             ->delete();
 
-        return redirect()->to("/regime-aliment/$regimeId")->with('success', 'Aliment supprimé du régime.');
+        return redirect()->to("/admin/regime-aliment/$regimeId")->with('success', 'Aliment supprimé du régime.');
     }
 }
